@@ -27,7 +27,7 @@ public:
 
 	GameObject* FetchGO();
 
-	void AddScore(GameObject* go);
+	//void AddScore(GameObject* go);
 	void CollisionResponse(GameObject *go1, GameObject *go2);
 	float CheckCollsion2(GameObject *go1, GameObject *go2);
 	bool CheckCollision(GameObject *go1, GameObject *go2, float dt);

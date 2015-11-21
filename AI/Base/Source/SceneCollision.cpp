@@ -189,7 +189,7 @@ void SceneCollision::CollisionResponse(GameObject *go1, GameObject *go2)
 	case GameObject::GO_GOALPOST:
 		{
 			soundEngine->play2D("Sound//goalpost.wav",false, false);
-			AddScore(go2);
+			//AddScore(go2);
 			go1->active = false;
 			NumOfBalls--;
 			AllowSpawn = true;
