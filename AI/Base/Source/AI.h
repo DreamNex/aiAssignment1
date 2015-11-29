@@ -2,6 +2,9 @@
 #define AI_H
 
 #include "GameObject.h"
+#include <vector>
+
+using namespace std;
 
 class cAI : public GameObject
 {
@@ -41,8 +44,6 @@ private:
 	const float proximity = 0.4f;
 
 	Vector3 AiPos1, AiPos2;
-
-	vector <myVector> wayPoints, intrusionPoints, myStack;
 };
 
 #endif

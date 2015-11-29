@@ -86,25 +86,6 @@ void AIMain::RenderGO()
 void AIMain::RenderObjects()
 {
 	RenderGO();
-
-	modelStack.PushMatrix();
-	// AI 1
-	modelStack.Translate(AiPos1.x, AiPos1.y, 0);
-	RenderMesh(meshList[GEO_BALL], false);
-	modelStack.PopMatrix();
-	
-	// AI 2
-	modelStack.PushMatrix();
-	modelStack.Translate(AiPos2.x, AiPos2.y, 0);
-	RenderMesh(meshList[GEO_BALL], false);
-	modelStack.PopMatrix();
-
-	//// Waypoints
-	//modelStack.PushMatrix();
-	//for (unsigned int i = 0; i < wayPoints.size(); i++)
-	//	modelStack.Translate(wayPoints[i].GetX(), wayPoints[i].GetY(), 0);
-	//RenderMesh(meshList[GEO_WAYPOINTS], false);
-	//modelStack.PopMatrix();
 }
 
 void AIMain::Render()
@@ -130,11 +111,6 @@ void AIMain::Render()
 	// Model matrix : an identity matrix (model will be at the origin)
 	modelStack.LoadIdentity();
 
-//	RenderMesh(meshList[GEO_AXES], false);
-	/*modelStack.PushMatrix();
-	modelStack.Translate(100, 50, 0);
-	RenderMesh(meshList[GEO_BALL], false);
-	modelStack.PopMatrix();*/
 	RenderObjects();
 }
 

@@ -29,8 +29,12 @@ cAI::~cAI()
 
 }
 
+std::vector <myVector> wayPoints, intrusionPoints, myStack;
+
 void cAI::init()
 {
+	
+
 	wayPoints.push_back(myVector(-offset, -offset));
 	wayPoints.push_back(myVector(-offset, offset));
 	wayPoints.push_back(myVector(offset, offset));
