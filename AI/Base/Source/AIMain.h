@@ -45,9 +45,6 @@ private:
 	float m_worldWidth;
 	float m_worldHeight;
 
-	
-
-
 	//For Sound (do only if have time)
 	ISoundEngine* soundEngine;
 };

@@ -14,6 +14,7 @@ public:
 
 	void init();
 	void update(double dt);
+	void FSM();
 
 	enum FSM_ONE
 	{
@@ -37,13 +38,14 @@ private:
 	//Waypoints and states
 	int state;
 	int wayPointIndex;
+	int randNum;
 	bool arrived;
 	float offset;
+	float probability;
 	const float playerRadius = 0.25;
 	const float enemyRadius = 0.1f;
 	const float proximity = 0.4f;
-
-	Vector3 AiPos1, AiPos2;
+	const float AiSpeed = 0.0175f;
 };
 
 #endif

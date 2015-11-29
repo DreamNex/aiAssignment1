@@ -6,9 +6,7 @@
 using namespace std;
 
 
-
 AIMain::AIMain()
-	
 {
 	
 }
@@ -18,27 +16,21 @@ AIMain::~AIMain()
 
 }
 
-
-
-
 void AIMain::Init()
 {
 	SceneBase::Init();
 	srand((unsigned)time(NULL));
-	//float offset = 2.0;
 
 	cAI *ai = new cAI();
 	ai->active = true;
 	ai->pos.Set(0, 0, 0);
 	ai->scale.Set(1, 1, 1);
-	ai->mesh = meshList[GEO_SHIP];
+	ai->mesh = meshList[GEO_BALL];
 	m_goList.push_back(ai);
 }
 
 void AIMain::Update(double dt)
 {
-	
-
 	for (unsigned i = 0; i < m_goList.size(); ++i)
 	{
 		cAI *ai = dynamic_cast<cAI*>(m_goList[i]);
@@ -76,8 +68,8 @@ void AIMain::RenderGO()
 	for (unsigned i = 0; i < m_goList.size(); ++i)
 	{
 		modelStack.PushMatrix();
-		modelStack.Translate(m_goList[i]->pos.x, m_goList[i]->pos.y, m_goList[i]->pos.z);
-		modelStack.Scale(m_goList[i]->scale.x, m_goList[i]->scale.y, m_goList[i]->scale.z);
+		modelStack.Translate(m_goList[i]->pos.x + 50, m_goList[i]->pos.y + 50, m_goList[i]->pos.z);
+		modelStack.Scale(m_goList[i]->scale.x * 2, m_goList[i]->scale.y * 2, m_goList[i]->scale.z);
 		RenderMesh(m_goList[i]->mesh, false);
 		modelStack.PopMatrix();
 	}
