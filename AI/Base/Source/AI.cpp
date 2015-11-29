@@ -18,6 +18,13 @@ struct myVector
 	float operator * (myVector  v){ return  x*v.x + y*v.y; }
 };
 
+
+int RandomInteger(int lowerLimit, int upperLimit)
+{
+	return rand() % (upperLimit - lowerLimit + 1) + lowerLimit;
+}
+
+
 cAI::cAI()
 	: offset(2.f)
 {
@@ -51,11 +58,6 @@ void cAI::init()
 	state = PATROL;
 	wayPointIndex = 1;
 	arrived = false;
-}
-
-int RandomInteger(int lowerLimit, int upperLimit)
-{
-	return rand() % (upperLimit - lowerLimit + 1) + lowerLimit;
 }
 
 void cAI::update(double dt)
