@@ -24,8 +24,9 @@ struct myVector
 };
 
 AIMain::AIMain()
+	
 {
-
+	
 }
 
 AIMain::~AIMain()
@@ -33,54 +34,35 @@ AIMain::~AIMain()
 
 }
 
-int state;
-int wayPointIndex;
-bool arrived;
-const float playerRadius = 0.25;
-const float proximity = 0.4f;
-vector <myVector> wayPoints, intrusionPoints, myStack;
-myVector playerPos, enemyPos;
 
-int RandomInteger(int lowerLimit, int upperLimit)
-{
-	return rand() % (upperLimit - lowerLimit + 1) + lowerLimit;
-}
+
 
 void AIMain::Init()
 {
 	SceneBase::Init();
 	srand((unsigned)time(NULL));
-	float offset = 2.0;
-	wayPoints.push_back(myVector(-offset, -offset));
-	wayPoints.push_back(myVector(-offset, offset));
-	wayPoints.push_back(myVector(offset, offset));
-	wayPoints.push_back(myVector(offset, -offset));
-	intrusionPoints.push_back(myVector(-1.2f*offset, -0.3f*offset));
-	intrusionPoints.push_back(myVector(-1.2f*offset, 0.3f*offset));
-	intrusionPoints.push_back(myVector(1.2f*offset, 0.3f*offset));
-	intrusionPoints.push_back(myVector(1.2f*offset, -0.3f*offset));
-	playerPos.SetPosition(wayPoints[0].GetX(), wayPoints[0].GetY());
-	int randomIndex = RandomInteger(1, 3);
-	enemyPos.SetPosition(intrusionPoints[randomIndex].GetX(), intrusionPoints[randomIndex].GetY());
-	state = PATROL;
-	wayPointIndex = 1;
-	arrived = false;
+	//float offset = 2.0;
+
+	cAI *ai = new cAI();
+	ai->active = true;
+	ai->pos.Set(0, 0, 0);
+	ai->scale.Set(1, 1, 1);
+	ai->mesh = meshList[GEO_SHIP];
+	m_goList.push_back(ai);
 }
 
 void AIMain::Update(double dt)
 {
-	if (arrived)
+	
+
+	for (unsigned i = 0; i < m_goList.size(); ++i)
 	{
-		if (myStack.size() == 0)
+		cAI *ai = dynamic_cast<cAI*>(m_goList[i]);
+
+		if (ai != NULL)
 		{
-			if (wayPointIndex == wayPoints.size() - 1)
-				wayPointIndex = 0;
-			else
-				wayPointIndex++;
+			ai->update(dt);
 		}
-		else
-			myStack.clear();
-		arrived = false;
 	}
 }
 
@@ -132,58 +114,71 @@ void RenderFillCircle(GLfloat x, GLfloat y, GLfloat radius, GLfloat r, GLfloat g
 	glEnd();
 }
 
-void AIMain::RenderGO(GameObject* go)
+void AIMain::RenderGO()
 {
-	//Render the Gameobjects
-
-	switch (go->type)
+	for (unsigned i = 0; i < m_goList.size(); ++i)
 	{
-		//simple model stack push pop rendering
-		glPushMatrix();
-		glTranslatef(0.0f, 0.0f, -10.0f);
-
-		// Player
-		RenderFillCircle(playerPos.GetX(), playerPos.GetY(), playerRadius, 0.0f, 0.0f, 1.0f);
-		RenderCircle(playerPos.GetX(), playerPos.GetY(), playerRadius + proximity, 0.1f, 0.1f, 0.1f);
-		// Waypoints
-		for (unsigned int i = 0; i < wayPoints.size(); i++)
-			RenderCircle(wayPoints[i].GetX(), wayPoints[i].GetY(), playerRadius + 0.1f, 1.0f, 0.0f, 0.0f);
-
-		glPopMatrix();
+		modelStack.PushMatrix();
+		modelStack.Translate(m_goList[i]->pos.x, m_goList[i]->pos.y, m_goList[i]->pos.z);
+		modelStack.Scale(m_goList[i]->scale.x, m_goList[i]->scale.y, m_goList[i]->scale.z);
+		RenderMesh(m_goList[i]->mesh, false);
+		modelStack.PopMatrix();
 	}
+}
+
+void AIMain::RenderObjects()
+{
+	RenderGO();
+
+	modelStack.PushMatrix();
+	// AI 1
+	modelStack.Translate(AiPos1.x, AiPos1.y, 0);
+	RenderMesh(meshList[GEO_BALL], false);
+	modelStack.PopMatrix();
+	
+	// AI 2
+	modelStack.PushMatrix();
+	modelStack.Translate(AiPos2.x, AiPos2.y, 0);
+	RenderMesh(meshList[GEO_BALL], false);
+	modelStack.PopMatrix();
+
+	//// Waypoints
+	//modelStack.PushMatrix();
+	//for (unsigned int i = 0; i < wayPoints.size(); i++)
+	//	modelStack.Translate(wayPoints[i].GetX(), wayPoints[i].GetY(), 0);
+	//RenderMesh(meshList[GEO_WAYPOINTS], false);
+	//modelStack.PopMatrix();
 }
 
 void AIMain::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	//Calculating aspect ratio
+	m_worldHeight = 100.f;
+	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
+
 	// Projection matrix : Orthographic Projection
 	Mtx44 projection;
-	viewStack.LoadIdentity();
-	if (Perspec)
-	{
-		projection.SetToPerspective(60, 4 / 3, 0.1, 5000);
-		viewStack.LookAt(
-			camera.position.x, camera.position.y, camera.position.z,
-			camera.target.x, camera.target.y, camera.target.z,
-			camera.up.x, camera.up.y, camera.up.z
-			);
-	}
-
-	else
-	{
-		projection.SetToOrtho(0, m_worldWidth, 0, m_worldHeight, -10, 10);
-
-	}
+	projection.SetToOrtho(0, m_worldWidth, 0, m_worldHeight, -10, 10);
 	projectionStack.LoadMatrix(projection);
+
 	// Camera matrix
-
-
+	viewStack.LoadIdentity();
+	viewStack.LookAt(
+		camera.position.x, camera.position.y, camera.position.z,
+		camera.target.x, camera.target.y, camera.target.z,
+		camera.up.x, camera.up.y, camera.up.z
+		);
 	// Model matrix : an identity matrix (model will be at the origin)
 	modelStack.LoadIdentity();
 
-	//RenderMesh(meshList[GEO_AXES], false);
-
+//	RenderMesh(meshList[GEO_AXES], false);
+	/*modelStack.PushMatrix();
+	modelStack.Translate(100, 50, 0);
+	RenderMesh(meshList[GEO_BALL], false);
+	modelStack.PopMatrix();*/
+	RenderObjects();
 }
 
 void AIMain::Exit()

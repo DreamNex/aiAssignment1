@@ -2,9 +2,11 @@
 #define GAME_OBJECT_H
 
 #include "Vector3.h"
+#include "Mesh.h"
 
-struct GameObject
+class GameObject
 {
+public:
 	enum GAMEOBJECT_TYPE
 	{
 		GO_NONE = 0,
@@ -28,6 +30,8 @@ struct GameObject
 		GO_MISSILE,
 		GO_TOTAL, //must be last
 	};
+	
+	Mesh *mesh;
 	GAMEOBJECT_TYPE type;
 	Vector3 pos;
 	Vector3 vel;
@@ -40,7 +44,7 @@ struct GameObject
 	Vector3 normal;
 
 	GameObject(GAMEOBJECT_TYPE typeValue = GO_BALL);
-	~GameObject();
+	virtual ~GameObject();
 };
 
 #endif
