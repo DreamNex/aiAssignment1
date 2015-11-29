@@ -5,23 +5,7 @@
 #include <vector>
 using namespace std;
 
-struct myVector
-{
-	float x, y;
-	myVector() :x(0), y(0){}
-	myVector(float x, float y) :x(x), y(y){}
-	void SetPosition(float _x, float _y){ x = _x; y = _y; }
-	float GetX(){ return x; }
-	float GetY(){ return y; }
-	float Magnitude(){ return sqrt(x*x + y*y); }
-	myVector Normalize(){ float length = Magnitude(); return myVector(x / length, y / length); }
-	myVector operator + (myVector u){ return myVector(x + u.x, y + u.y); }
-	myVector operator - (myVector u){ return myVector(u.x - x, u.y - y); }
-	myVector operator += (myVector u){ return myVector(x + u.x, y + u.y); }
-	myVector operator ~(){ return myVector(-x, -y); }
-	myVector operator *(float scale){ return myVector(x*scale, y*scale); }
-	float operator * (myVector  v){ return  x*v.x + y*v.y; }
-};
+
 
 AIMain::AIMain()
 	
@@ -85,33 +69,6 @@ GameObject* AIMain::FetchGO()
 	GameObject *go = m_goList.back();
 	go->active = true;
 	return go;
-}
-
-void RenderCircle(GLfloat x, GLfloat y, GLfloat radius, GLfloat r, GLfloat g, GLfloat b)
-{
-	int n = 360;
-	glColor3f(r, g, b);
-	glBegin(GL_POINTS);
-	for (int i = 0; i <= n; i++)
-	{
-		float angle = (float)(i * (2.0 * 3.14159 / n));
-		glVertex2f(x + radius * cos(angle), y + radius * sin(angle));
-	}
-	glEnd();
-}
-
-void RenderFillCircle(GLfloat x, GLfloat y, GLfloat radius, GLfloat r, GLfloat g, GLfloat b)
-{
-	int n = 360;
-	glColor3f(r, g, b);
-	glBegin(GL_TRIANGLE_FAN);
-	glVertex2f(x, y);
-	for (int i = 0; i <= n; i++)
-	{
-		float angle = (float)(i * (2.0 * 3.14159 / n));
-		glVertex2f(x + radius * cos(angle), y + radius * sin(angle));
-	}
-	glEnd();
 }
 
 void AIMain::RenderGO()

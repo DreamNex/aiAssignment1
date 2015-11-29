@@ -1,5 +1,23 @@
 #include "AI.h"
 
+struct myVector
+{
+	float x, y;
+	myVector() :x(0), y(0){}
+	myVector(float x, float y) :x(x), y(y){}
+	void SetPosition(float _x, float _y){ x = _x; y = _y; }
+	float GetX(){ return x; }
+	float GetY(){ return y; }
+	float Magnitude(){ return sqrt(x*x + y*y); }
+	myVector Normalize(){ float length = Magnitude(); return myVector(x / length, y / length); }
+	myVector operator + (myVector u){ return myVector(x + u.x, y + u.y); }
+	myVector operator - (myVector u){ return myVector(u.x - x, u.y - y); }
+	myVector operator += (myVector u){ return myVector(x + u.x, y + u.y); }
+	myVector operator ~(){ return myVector(-x, -y); }
+	myVector operator *(float scale){ return myVector(x*scale, y*scale); }
+	float operator * (myVector  v){ return  x*v.x + y*v.y; }
+};
+
 cAI::cAI()
 	: offset(2.f)
 {
