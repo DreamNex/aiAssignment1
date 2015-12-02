@@ -1,22 +1,8 @@
 #include "AI.h"
 
-struct myVector
-{
-	float x, y;
-	myVector() :x(0), y(0){}
-	myVector(float x, float y) :x(x), y(y){}
-	void SetPosition(float _x, float _y){ x = _x; y = _y; }
-	float GetX(){ return x; }
-	float GetY(){ return y; }
-	float Magnitude(){ return sqrt(x*x + y*y); }
-	myVector Normalize(){ float length = Magnitude(); return myVector(x / length, y / length); }
-	myVector operator + (myVector u){ return myVector(x + u.x, y + u.y); }
-	myVector operator - (myVector u){ return myVector(u.x - x, u.y - y); }
-	myVector operator += (myVector u){ return myVector(x + u.x, y + u.y); }
-	myVector operator ~(){ return myVector(-x, -y); }
-	myVector operator *(float scale){ return myVector(x*scale, y*scale); }
-	float operator * (myVector  v){ return  x*v.x + y*v.y; }
-};
+using namespace MyAI;
+using namespace std;
+
 
 float GetDistance(float x1, float y1, float x2, float y2)
 { 
@@ -38,40 +24,41 @@ cAI::~cAI()
 {
 }
 
-myVector AiPos1, AiPos2, nextPoint;
-vector <myVector> wayPoints, intrusionPoints, myStack;
+Vector3 nextPoint;
+vector <Vector3> wayPoints, intrusionPoints, myStack;
 
 void cAI::init()
 {
-	wayPoints.push_back(myVector(-offset, -offset));
-	wayPoints.push_back(myVector(-offset, offset));
-	wayPoints.push_back(myVector(offset, offset));
-	wayPoints.push_back(myVector(offset, -offset));
+	wayPoints.push_back(Vector3(-offset, -offset));
+	wayPoints.push_back(Vector3(-offset, offset));
+	wayPoints.push_back(Vector3(offset, offset));
+	wayPoints.push_back(Vector3(offset, -offset));
 
-	intrusionPoints.push_back(myVector(-1.2f*offset, -0.3f*offset));
-	intrusionPoints.push_back(myVector(-1.2f*offset, 0.3f*offset));
-	intrusionPoints.push_back(myVector(1.2f*offset, 0.3f*offset));
-	intrusionPoints.push_back(myVector(1.2f*offset, -0.3f*offset));
-	AiPos1.SetPosition(wayPoints[0].GetX(), wayPoints[0].GetY());
+	intrusionPoints.push_back(Vector3(-1.2f*offset, -0.3f*offset));
+	intrusionPoints.push_back(Vector3(-1.2f*offset, 0.3f*offset));
+	intrusionPoints.push_back(Vector3(1.2f*offset, 0.3f*offset));
+	intrusionPoints.push_back(Vector3(1.2f*offset, -0.3f*offset));
+	pos.Set(wayPoints[0].x, wayPoints[0].y);
 
 	int randomIndex = RandomInteger(1, 3);
-	AiPos2.SetPosition(intrusionPoints[randomIndex].GetX(), intrusionPoints[randomIndex].GetY());
-	state = PATROL;
+	pos.Set(intrusionPoints[randomIndex].x, intrusionPoints[randomIndex].y);
+	FSM2 = PATROL;
 	wayPointIndex = 1;
 	arrived = false;
 	probability = 30.0f;
+	
 }
 
-void cAI::FSM()
+void cAI::FiniteStateM2()
 {
-	switch (state)
+	switch (FSM2)
 	{
 		case PATROL:
 			// if probability == true, idle
 			randNum = RandomInteger(1, 100);
 			if (randNum <= probability)
 			{
-				state = IDLE;
+				FSM2 = IDLE;
 			}
 			break;
 
@@ -80,41 +67,45 @@ void cAI::FSM()
 			{
 				if (timer == 100)
 				{
-					state = PATROL;
+					FSM2 = PATROL;
 				}
 			}
 			break;
 
 		case SCAN:
 			// if detect, go to fsm2
-			switch (state)
-			{
-				case ATTACK:
-					break;
-			}
+			FSM1 = ATTACK;
 			break;
 	}
 }
 
 void cAI::update(double dt)
 {
-	if (state == PATROL)
+	FiniteStateM2();
+	switch (FSM2)
+	{
+		case PATROL:
+		{
+			cout << "patrol\n";
+		}
+	}
+	if (FSM2 == PATROL)
 	{
 		if (myStack.size() == 0)
 			nextPoint = wayPoints[wayPointIndex];
 		else
 			nextPoint = myStack[myStack.size() - 1];
 
-		myVector direction = (AiPos1 - nextPoint).Normalize();
-		float distance = GetDistance(AiPos1.GetX(), AiPos1.GetY(), nextPoint.GetX(), nextPoint.GetY());
+		Vector3 direction = (pos - nextPoint).Normalize();
+		float distance = GetDistance(pos.x, pos.y, nextPoint.x, nextPoint.y);
 
 		if (distance < AiSpeed)
 		{
-			AiPos1 = nextPoint;
+			pos = nextPoint;
 			arrived = true;
 		}
 		else
-			AiPos1 = AiPos1 + direction*AiSpeed;
+			pos = pos + direction * AiSpeed;
 
 		if (arrived)
 		{
@@ -126,7 +117,9 @@ void cAI::update(double dt)
 					wayPointIndex++;
 			}
 			else
+			{
 				myStack.clear();
+			}
 			arrived = false;
 		}
 	}

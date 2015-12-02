@@ -7,8 +7,6 @@
 #include "AI.h"
 #include <irrKlang.h>
 
-using namespace irrklang;
-
 class AIMain : public SceneBase
 {
 public:
@@ -26,8 +24,8 @@ public:
 	GameObject* FetchGO();
 
 	//Simple Variables
-	GameObject* AI;
-	GameObject* AI2;
+	MyAI::cAI* AI1;
+	MyAI::cAI* AI2;
 protected:
 
 	//Might not use these Enums since we might use Integers to do 
@@ -46,7 +44,7 @@ private:
 	float m_worldHeight;
 
 	//For Sound (do only if have time)
-	ISoundEngine* soundEngine;
+	irrklang::ISoundEngine* soundEngine;
 };
 
 #endif

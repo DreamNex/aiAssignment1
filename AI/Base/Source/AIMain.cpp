@@ -3,7 +3,9 @@
 #include "Application.h"
 #include <sstream>
 #include <vector>
-using namespace std;
+
+using namespace irrklang;
+using namespace MyAI;
 
 
 AIMain::AIMain()
@@ -27,6 +29,13 @@ void AIMain::Init()
 	ai->scale.Set(1, 1, 1);
 	ai->mesh = meshList[GEO_BALL];
 	m_goList.push_back(ai);
+
+	AI1 = new cAI();
+	AI1->active = true;
+	AI1->pos.Set(10, 0, 0);
+	AI1->scale.Set(1, 1, 1);
+	AI1->mesh = meshList[GEO_BALL2];
+	m_goList.push_back(AI1);
 }
 
 void AIMain::Update(double dt)
