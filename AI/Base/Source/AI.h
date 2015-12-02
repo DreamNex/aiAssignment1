@@ -12,7 +12,7 @@ namespace MyAI
 		ATTACK,
 		DODGE,
 		RESET,
-		STOP,
+		STOP1,
 	};
 
 	enum FSM_TWO
@@ -20,7 +20,7 @@ namespace MyAI
 		PATROL,
 		SCAN,
 		IDLE,
-		STOP,
+		STOP2,
 		
 	};
 	class cAI : public GameObject

@@ -46,7 +46,6 @@ void cAI::init()
 	wayPointIndex = 1;
 	arrived = false;
 	probability = 30.0f;
-	
 }
 
 void cAI::FiniteStateM2()
@@ -75,6 +74,7 @@ void cAI::FiniteStateM2()
 		case SCAN:
 			// if detect, go to fsm2
 			FSM1 = ATTACK;
+			FSM2 = STOP2;
 			break;
 	}
 }
