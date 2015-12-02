@@ -81,6 +81,7 @@ void cAI::FiniteStateM2()
 
 void cAI::update(double dt)
 {
+	
 	FiniteStateM2();
 	switch (FSM2)
 	{
@@ -105,7 +106,7 @@ void cAI::update(double dt)
 			arrived = true;
 		}
 		else
-			pos = pos + direction * AiSpeed;
+			pos = pos + direction * AiSpeed *dt;
 
 		if (arrived)
 		{

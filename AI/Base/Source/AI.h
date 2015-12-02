@@ -50,7 +50,7 @@ namespace MyAI
 		const float playerRadius = 0.25;
 		const float enemyRadius = 0.1f;
 		const float proximity = 0.4f;
-		const float AiSpeed = 0.0175f;
+		const float AiSpeed = 4.f;
 	};
 }
 #endif
