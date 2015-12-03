@@ -17,6 +17,9 @@ int RandomInteger(int lowerLimit, int upperLimit)
 
 cAI::cAI()
 	: offset(2.0f)
+	,wayPointIndex(0)
+	,arrived(false)
+	,probability(30.f)
 {
 }
 
@@ -43,21 +46,14 @@ void cAI::init()
 	int randomIndex = RandomInteger(1, 3);
 	pos.Set(intrusionPoints[randomIndex].x, intrusionPoints[randomIndex].y);
 	FSM2 = PATROL;
-
-	wayPointIndex = 0;
-
 	FSM1 = STOP1;
 
-
-	arrived = false;
-	probability = 30.0f;
 }
 
 
 
 void cAI::update(double dt)
 {
-
 	
 	switch (FSM2)
 	{
@@ -95,12 +91,12 @@ void cAI::update(double dt)
 					   }
 					   arrived = false;
 				   }
-				   // if probability == true, idle
+/*				   // if probability == true, idle
 				   randNum = RandomInteger(1, 100);
 				   if (randNum <= probability)
 				   {
-					   FSM2 = IDLE;
-				   }
+					   state = IDLE;
+				   }*/
 				   break;
 
 		}
@@ -108,7 +104,7 @@ void cAI::update(double dt)
 		case IDLE:
 		{
 				 pos = pos;
-				 FSM2 = SCAN;
+				// state = SCAN;
 				 for (int timer = 0; timer < 100; timer++)
 				 {
 					 if (timer == 100)
@@ -119,10 +115,10 @@ void cAI::update(double dt)
 				 break;
 		}
 
-		case SCAN:
+		case 3:
 		{
-				 FSM1 = ATTACK;
-				 FSM2 = STOP2;
+				// FSM1 = ATTACK;
+				// FSM2 = STOP2;
 				 break;
 		}
 	

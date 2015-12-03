@@ -21,13 +21,15 @@ AIMain::~AIMain()
 void AIMain::Init()
 {
 	SceneBase::Init();
+	
 	srand((unsigned)time(NULL));
-
+	
 	cAI *ai = new cAI();
 	ai->active = true;
 	ai->pos.Set(0, 0, 0);
 	ai->scale.Set(1, 1, 1);
 	ai->mesh = meshList[GEO_BALL];
+	ai->init();
 	m_goList.push_back(ai);
 
 	/*AI1 = new cAI();
