@@ -43,7 +43,12 @@ void cAI::init()
 	int randomIndex = RandomInteger(1, 3);
 	pos.Set(intrusionPoints[randomIndex].x, intrusionPoints[randomIndex].y);
 	FSM2 = PATROL;
+
 	wayPointIndex = 0;
+
+	FSM1 = STOP1;
+
+
 	arrived = false;
 	probability = 30.0f;
 }
