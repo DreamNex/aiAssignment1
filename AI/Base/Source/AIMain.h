@@ -24,8 +24,7 @@ public:
 	GameObject* FetchGO();
 
 	//Simple Variables
-	MyAI::cAI* AI1;
-	MyAI::cAI* AI2;
+	
 protected:
 
 	//Might not use these Enums since we might use Integers to do 

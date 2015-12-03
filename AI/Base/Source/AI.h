@@ -31,11 +31,8 @@ namespace MyAI
 
 		void init();
 		void update(double dt);
-		void FiniteStateM2();
-
 
 		FSM_ONE FSM1;
-
 
 		FSM_TWO FSM2;
 

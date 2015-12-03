@@ -42,6 +42,7 @@ public:
 	float MAX_VEL;
 	GameObject* homing;
 	Vector3 normal;
+	unsigned int health;
 
 	GameObject(GAMEOBJECT_TYPE typeValue = GO_BALL);
 	virtual ~GameObject();
