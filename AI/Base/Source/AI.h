@@ -38,7 +38,7 @@ namespace MyAI
 
 	private:
 		//Waypoints and states
-		
+
 		int wayPointIndex;
 		int randNum;
 		bool arrived;

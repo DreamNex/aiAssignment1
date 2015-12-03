@@ -54,7 +54,6 @@ void cAI::init()
 
 void cAI::update(double dt)
 {
-	
 	switch (FSM2)
 	{
 		case PATROL:
