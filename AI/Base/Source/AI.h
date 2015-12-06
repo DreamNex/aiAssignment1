@@ -4,6 +4,10 @@
 #include "GameObject.h"
 #include <vector>
 #include "Vector3.h"
+#include "MeshBuilder.h"
+#include "GL\glew.h"
+#include "SceneBase.h"
+#include "Application.h"
 
 namespace MyAI
 {
@@ -31,6 +35,7 @@ namespace MyAI
 
 		void init();
 		void update(double dt);
+		void RenderState(Mesh* mesh, std::string text, Color color);
 
 		FSM_ONE FSM1;
 
@@ -39,7 +44,7 @@ namespace MyAI
 	private:
 		//Waypoints and states
 
-		int wayPointIndex;
+		unsigned int wayPointIndex;
 		int randNum;
 		bool arrived;
 		float offset;
@@ -47,7 +52,7 @@ namespace MyAI
 		const float playerRadius = 0.25;
 		const float enemyRadius = 0.1f;
 		const float proximity = 0.4f;
-		const float AiSpeed = 4.f;
+		const float AiSpeed = 10.f;
 	};
 }
 #endif

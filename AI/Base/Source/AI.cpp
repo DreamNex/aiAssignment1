@@ -16,7 +16,7 @@ int RandomInteger(int lowerLimit, int upperLimit)
 
 
 cAI::cAI()
-	: offset(2.0f)
+	: offset(10.f)
 	,wayPointIndex(0)
 	,arrived(false)
 	,probability(30.f)
@@ -28,7 +28,7 @@ cAI::~cAI()
 }
 
 Vector3 nextPoint;
-vector <Vector3> wayPoints, intrusionPoints, myStack;
+vector <Vector3> wayPoints, myStack;
 
 void cAI::init()
 {
@@ -36,18 +36,14 @@ void cAI::init()
 	wayPoints.push_back(Vector3(-offset, offset));
 	wayPoints.push_back(Vector3(offset, offset));
 	wayPoints.push_back(Vector3(offset, -offset));
-
-	intrusionPoints.push_back(Vector3(-1.2f*offset, -0.3f*offset));
-	intrusionPoints.push_back(Vector3(-1.2f*offset, 0.3f*offset));
-	intrusionPoints.push_back(Vector3(1.2f*offset, 0.3f*offset));
-	intrusionPoints.push_back(Vector3(1.2f*offset, -0.3f*offset));
-	pos.Set(wayPoints[0].x, wayPoints[0].y);
-
+	wayPoints.push_back(Vector3(-offset + 10, -offset + 10));
+	wayPoints.push_back(Vector3(-offset + 10, offset + 10));
+	wayPoints.push_back(Vector3(offset + 10, offset + 10));
+	wayPoints.push_back(Vector3(offset + 10, -offset + 10));
+	//pos.Set(wayPoints[0].x, wayPoints[0].y);
 	int randomIndex = RandomInteger(1, 3);
-	pos.Set(intrusionPoints[randomIndex].x, intrusionPoints[randomIndex].y);
 	FSM2 = PATROL;
 	FSM1 = STOP1;
-
 }
 
 
@@ -59,52 +55,52 @@ void cAI::update(double dt)
 		case PATROL:
 		{
 
-				   if (myStack.size() == 0)
-					   nextPoint = wayPoints[wayPointIndex];
-				   else
-					   nextPoint = myStack[myStack.size() - 1];
+			if (myStack.size() == 0)
+				nextPoint = wayPoints[wayPointIndex];
+			else
+				nextPoint = myStack[myStack.size() - 1];
 
-				   Vector3 direction = (pos - nextPoint).Normalize();
-				   float distance = GetDistance(pos.x, pos.y, nextPoint.x, nextPoint.y);
+			Vector3 direction = (nextPoint - pos).Normalize();
+			float distance = GetDistance(pos.x, pos.y, nextPoint.x, nextPoint.y);
 
-				   if (distance < AiSpeed)
-				   {
-					   pos = nextPoint;
-					   arrived = true;
-				   }
-				   else
-					   pos = pos + direction * AiSpeed *dt;
+			if (distance < 1)
+			{
+				pos = nextPoint;
+				arrived = true;
+			}
+			else
+				pos = pos + (direction * AiSpeed *dt);
 
-				   if (arrived)
-				   {
-					   if (myStack.size() == 0)
-					   {
-						   if (wayPointIndex == wayPoints.size() - 1)
-							   wayPointIndex = 0;
-						   else
-							   wayPointIndex++;
-					   }
-					   else
-					   {
-						   myStack.clear();
-					   }
-					   arrived = false;
-				   }
-/*				   // if probability == true, idle
-				   randNum = RandomInteger(1, 100);
-				   if (randNum <= probability)
-				   {
-					   state = IDLE;
-				   }*/
-				   break;
+			if (arrived)
+			{
+				if (myStack.size() == 0)
+				{
+					if (wayPointIndex == wayPoints.size() - 1)
+						wayPointIndex = 0;
+					else
+						wayPointIndex++;
+				}
+				else
+				{
+					myStack.clear();
+				}
+				arrived = false;
+			}
+			// if probability == true, idle
+			randNum = RandomInteger(1, 100);
+			if (randNum <= probability)
+			{
+				FSM2 = IDLE;
+			}
 
+			break;
 		}
 
 		case IDLE:
 		{
 				 pos = pos;
 				// state = SCAN;
-				 for (int timer = 0; timer < 100; timer++)
+				 for (int timer = 0; timer < 500; timer++)
 				 {
 					 if (timer == 100)
 					 {
@@ -123,4 +119,39 @@ void cAI::update(double dt)
 	
 	}
 
+}
+
+void cAI::RenderState(Mesh* mesh, std::string text, Color color)
+{
+	//if (!mesh || mesh->textureID <= 0)
+	//	return;
+
+	//glDisable(GL_DEPTH_TEST);
+	//glUniform1i(m_parameters[U_TEXT_ENABLED], 1);
+	//glUniform3fv(m_parameters[U_TEXT_COLOR], 1, &color.r);
+	//glUniform1i(m_parameters[U_LIGHTENABLED], 0);
+	//glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
+	//glActiveTexture(GL_TEXTURE0);
+	//glBindTexture(GL_TEXTURE_2D, mesh->textureID);
+	//glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
+	//for (unsigned i = 0; i < text.length(); ++i)
+	//{
+	//	Mtx44 characterSpacing;
+	//	characterSpacing.SetToTranslation(i * 0.8f, 0, 0); //1.0f is the spacing of each character, you may change this value
+	//	Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
+	//	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+	//	mesh->Render((unsigned)text[i] * 6, 6);
+	//}
+	//glBindTexture(GL_TEXTURE_2D, 0);
+	//glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
+	//glEnable(GL_DEPTH_TEST);
+
+	//std::string stateString = "";
+	//switch (FSM2)
+	//{
+	//case PATROL:
+	//	stateString = "PATROL";
+	//	break;
+	//}
 }
