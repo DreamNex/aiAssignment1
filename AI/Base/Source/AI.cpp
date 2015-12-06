@@ -20,6 +20,7 @@ cAI::cAI()
 	,wayPointIndex(0)
 	,arrived(false)
 	,probability(30.f)
+	, detected(false)
 {
 }
 
@@ -46,7 +47,28 @@ void cAI::init()
 	FSM1 = STOP1;
 }
 
+bool cAI::isVisible2D(const Vector3 &Position, float rotation, float FOV, const Vector3 &ObjectPosition)
+{
+	float lookingOBJ = CalAnglefromPosition2D(ObjectPosition, Position);
+	float cameraRotation = rotation;
+	bool LO = false, CR = false;
 
+	if (lookingOBJ - cameraRotation > 180.f)
+	{
+		lookingOBJ -= 360.f;
+	}
+	else if (lookingOBJ - cameraRotation < -180.f)
+	{
+		lookingOBJ += 360.f;
+	}
+
+	if ((lookingOBJ + FOV > cameraRotation && lookingOBJ - FOV < cameraRotation))
+	{
+		return true;
+	}
+
+	return false;
+}
 
 void cAI::update(double dt)
 {
@@ -54,6 +76,7 @@ void cAI::update(double dt)
 	{
 		case PATROL:
 		{
+
 
 			if (myStack.size() == 0)
 				nextPoint = wayPoints[wayPointIndex];
@@ -94,6 +117,7 @@ void cAI::update(double dt)
 			}
 
 			break;
+
 		}
 
 		case IDLE:
@@ -110,48 +134,38 @@ void cAI::update(double dt)
 				 break;
 		}
 
-		case 3:
+		case DETECTED:
 		{
-				// FSM1 = ATTACK;
-				// FSM2 = STOP2;
-				 break;
+
+						 FSM1 = ATTACK;
+						 FSM2 = STOP2;
+						 break;
 		}
 	
 	}
 
-}
+	switch (FSM1)
+	{
+	case ATTACK:
+	{
 
-void cAI::RenderState(Mesh* mesh, std::string text, Color color)
-{
-	//if (!mesh || mesh->textureID <= 0)
-	//	return;
+				   if (missed != true)
+				   {
+					   target->health--;
+					   
+				   }
+				   break;
+	}
+	case DODGE:
+	{
+				  FSM1 = ATTACK;
+				  break;
+	}
+	}
 
-	//glDisable(GL_DEPTH_TEST);
-	//glUniform1i(m_parameters[U_TEXT_ENABLED], 1);
-	//glUniform3fv(m_parameters[U_TEXT_COLOR], 1, &color.r);
-	//glUniform1i(m_parameters[U_LIGHTENABLED], 0);
-	//glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
-	//glActiveTexture(GL_TEXTURE0);
-	//glBindTexture(GL_TEXTURE_2D, mesh->textureID);
-	//glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
-	//for (unsigned i = 0; i < text.length(); ++i)
-	//{
-	//	Mtx44 characterSpacing;
-	//	characterSpacing.SetToTranslation(i * 0.8f, 0, 0); //1.0f is the spacing of each character, you may change this value
-	//	Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
-	//	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
-
-	//	mesh->Render((unsigned)text[i] * 6, 6);
-	//}
-	//glBindTexture(GL_TEXTURE_2D, 0);
-	//glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
-	//glEnable(GL_DEPTH_TEST);
-
-	//std::string stateString = "";
-	//switch (FSM2)
-	//{
-	//case PATROL:
-	//	stateString = "PATROL";
-	//	break;
-	//}
+	if ((pos - target->pos).Length() < 4)
+	{
+		FSM2 = DETECTED;
+		FSM1 = STOP1;
+	}
 }

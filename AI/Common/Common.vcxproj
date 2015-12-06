@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="Source\MatrixStack.cpp" />
     <ClCompile Include="Source\Mtx44.cpp" />
+    <ClCompile Include="Source\SP3DLC.cpp" />
     <ClCompile Include="Source\timer.cpp" />
     <ClCompile Include="Source\Vector3.cpp" />
   </ItemGroup>
@@ -20,6 +21,7 @@
     <ClInclude Include="Source\MatrixStack.h" />
     <ClInclude Include="Source\Mtx44.h" />
     <ClInclude Include="Source\MyMath.h" />
+    <ClInclude Include="Source\SP3DLC.h" />
     <ClInclude Include="Source\timer.h" />
     <ClInclude Include="Source\Vector3.h" />
   </ItemGroup>
