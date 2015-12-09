@@ -51,6 +51,7 @@ namespace MyAI
 		float probabilityIdle;
 		float probabilityDodge;
 		cAI* target;
+		int timer;
 
 		const double rangeofFOV = 100;
 		const float playerRadius = 0.25;

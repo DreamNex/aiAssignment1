@@ -66,7 +66,7 @@ void AIMain::Update(double dt)
 			ai->update(dt);
 		}
 
-		switch (ai->getState())
+		/*switch (ai->getState())
 		{
 		case PATROL:
 			RenderText(meshList[GEO_TEXT], "Patrol", Color(0, 1, 0));
@@ -86,7 +86,7 @@ void AIMain::Update(double dt)
 		case DODGE:
 			RenderText(meshList[GEO_TEXT], "Dodge", Color(0, 1, 0));
 			break;
-		}
+		}*/
 	}
 }
 

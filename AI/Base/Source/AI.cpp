@@ -20,9 +20,10 @@ cAI::cAI()
 	// Set another offset variable
 	,wayPointIndex(0)
 	,arrived(false)
-	,probabilityIdle(30.f)
+	,probabilityIdle(80.f)
 	, probabilityDodge(40.f)
 	, detected(false)
+	, timer(0)
 {
 }
 
@@ -39,10 +40,10 @@ void cAI::init()
 	wayPoints.push_back(Vector3(-offset, offset));
 	wayPoints.push_back(Vector3(offset, offset));
 	wayPoints.push_back(Vector3(offset, -offset));
-	wayPoints.push_back(Vector3(offset * 5, -offset * 5));
-	wayPoints.push_back(Vector3(offset * 5, offset * 5));
-	wayPoints.push_back(Vector3(-offset * 5, offset * 5));
-	wayPoints.push_back(Vector3(-offset * 5, -offset * 5));
+	wayPoints.push_back(Vector3(offset * 3, -offset * 3));
+	wayPoints.push_back(Vector3(offset * 3, offset * 3));
+	wayPoints.push_back(Vector3(-offset * 3, offset * 3));
+	wayPoints.push_back(Vector3(-offset * 3, -offset * 3));
 	//pos.Set(wayPoints[0].x, wayPoints[0].y);
 	int randomIndex = RandomInteger(1, 3);
 	FSM2 = PATROL;
@@ -124,15 +125,12 @@ void cAI::update(double dt)
 
 		case IDLE:
 		{
-				 pos = pos;
 				// state = SCAN;
-				 for (int timer = 0; timer < 500; timer++)
+				 if (timer >= 100)
 				 {
-					 if (timer == 500)
-					 {
-						 FSM2 = PATROL;
-					 }
+					 FSM2 = PATROL;
 				 }
+				 timer++;
 				 break;
 		}
 
@@ -168,11 +166,11 @@ void cAI::update(double dt)
 		}
 	}
 
-	if ((pos - target->pos).Length() < 4)
+	/*if ((pos - target->pos).Length() < 4)
 	{
 		FSM2 = DETECTED;
 		FSM1 = STOP1;
-	}
+	}*/
 }
 
 FSM_TWO cAI::getState()
