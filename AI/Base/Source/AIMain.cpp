@@ -41,7 +41,7 @@ void AIMain::Init()
 	
 	cAI* ai = new cAI();
 	ai->active = true;
-	ai->pos.Set(-10, -10, 0);
+	ai->pos.Set(-30, -30, 1);
 	ai->scale.Set(1, 1, 1);
 	ai->mesh = meshList[GEO_BALL];
 	
@@ -50,7 +50,7 @@ void AIMain::Init()
 
 	cAI* ai2 = new cAI();
 	ai2->active = true;
-	ai2->pos.Set(10, 10, 0);
+	ai2->pos.Set(30, 30, 1);
 	ai2->scale.Set(1, 1, 1);
 	ai2->mesh = meshList[GEO_BALL2];
 	ai2->init();
@@ -58,6 +58,10 @@ void AIMain::Init()
 
 	ai->target = ai2;
 	ai2->target = ai;
+
+	state = 1;
+	state2 = 1;
+	respawntime = 6;
 }
 
 void AIMain::Update(double dt)
@@ -71,28 +75,48 @@ void AIMain::Update(double dt)
 			ai->update(dt);
 		}
 
-		/*switch (ai->getState())
+		switch (ai->getState())
 		{
 		case PATROL:
-			RenderText(meshList[GEO_TEXT], "Patrol", Color(0, 1, 0));
+			state = 1;
+			state2 = 1;
 			break;
-
 		case IDLE:
-			RenderText(meshList[GEO_TEXT], "Idle", Color(0, 1, 0));
+			state = 2;
+			state2 = 2;
 			break;
 		}
 
 		switch (ai->getState2())
 		{
 		case ATTACK:
-			RenderText(meshList[GEO_TEXT], "Attack", Color(0, 1, 0));
+			state = 3;
+			state2 = 3;
 			break;
-
 		case DODGE:
-			RenderText(meshList[GEO_TEXT], "Dodge", Color(0, 1, 0));
+			state = 4;
+			state = 4;
 			break;
-		}*/
+		}
+
+		if (ai->health == 0)
+		{
+			ai->active = false;
+			respawntime = 6;
+		}
+
+		if (ai->active == false)
+		{
+			respawntime--;
+		}
+		
+		if (respawntime == 0)
+		{
+			ai->active = true;
+		}
 	}
+
+	
 }
 
 void AIMain::Render2DMesh(Mesh *mesh, bool enableLight, int size, int x, int y, bool rotate, bool flip)
@@ -161,20 +185,34 @@ void AIMain::RenderGO()
 {
 	for (unsigned i = 0; i < m_goList.size(); ++i)
 	{
-		modelStack.PushMatrix();
-		modelStack.Translate(m_goList[i]->pos.x + 50, m_goList[i]->pos.y + 50, m_goList[i]->pos.z);
-		modelStack.Scale(m_goList[i]->scale.x * 2, m_goList[i]->scale.y * 2, m_goList[i]->scale.z);
-		RenderMesh(m_goList[i]->mesh, false);
-		modelStack.PopMatrix();
+		if (m_goList[i]->active == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(m_goList[i]->pos.x + 50, m_goList[i]->pos.y + 50, m_goList[i]->pos.z);
+			modelStack.Scale(m_goList[i]->scale.x * 2, m_goList[i]->scale.y * 2, m_goList[i]->scale.z);
+			RenderMesh(m_goList[i]->mesh, false);
+			modelStack.PopMatrix();
+		}
 	}
 }
 
-void AIMain::RenderText(Mesh* mesh, std::string text, Color color)
+void AIMain::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
 {
 	if (!mesh || mesh->textureID <= 0)
 		return;
 
 	glDisable(GL_DEPTH_TEST);
+	Mtx44 ortho;
+	//ortho.SetToOrtho(0, m_window_width, 0, m_window_height, -10, 10);
+	ortho.SetToOrtho(0, m_worldWidth, 0, m_worldHeight, -10, 10);
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity();
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity();
+	modelStack.Translate(x, y, 0);
+	modelStack.Scale(size, size, size);
 	glUniform1i(m_parameters[U_TEXT_ENABLED], 1);
 	glUniform3fv(m_parameters[U_TEXT_COLOR], 1, &color.r);
 	glUniform1i(m_parameters[U_LIGHTENABLED], 0);
@@ -185,7 +223,7 @@ void AIMain::RenderText(Mesh* mesh, std::string text, Color color)
 	for (unsigned i = 0; i < text.length(); ++i)
 	{
 		Mtx44 characterSpacing;
-		characterSpacing.SetToTranslation(i * 0.8f, 0, 0); //1.0f is the spacing of each character, you may change this value
+		characterSpacing.SetToTranslation((i*0.5f) + 0.5f, 0.5f, 0); //1.0f is the spacing of each character, you may change this value
 		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
 		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
 
@@ -193,6 +231,9 @@ void AIMain::RenderText(Mesh* mesh, std::string text, Color color)
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
+	modelStack.PopMatrix();
+	viewStack.PopMatrix();
+	projectionStack.PopMatrix();
 	glEnable(GL_DEPTH_TEST);
 }
 
@@ -224,9 +265,71 @@ void AIMain::Render()
 	// Model matrix : an identity matrix (model will be at the origin)
 	modelStack.LoadIdentity();
 
-	Render2DMesh(meshList[GEO_BACKGROUND], false, 1);
+	modelStack.PushMatrix();
+	modelStack.Translate(67, 50, 0);
+	modelStack.Scale(70, 70, 0);
+	RenderMesh(meshList[GEO_BACKGROUND], false);
+	modelStack.PopMatrix();
 
 	RenderObjects();
+	
+	switch (state)
+	{
+	case 1:
+		modelStack.PushMatrix();
+		RenderTextOnScreen(meshList[GEO_TEXT], "AI: Patrol", Color(1, 0, 0), 5, 3, 90);
+		modelStack.PopMatrix();
+		break;
+
+	case 2:
+		modelStack.PushMatrix();
+		RenderTextOnScreen(meshList[GEO_TEXT], "AI: Idle", Color(1, 0, 0), 5, 3, 90);
+		modelStack.PopMatrix();
+		break;
+
+	case 3:
+		modelStack.PushMatrix();
+		RenderTextOnScreen(meshList[GEO_TEXT], "AI: Attack", Color(1, 0, 0), 5, 3, 90);
+		modelStack.PopMatrix();
+		break;
+
+	case 4:
+		modelStack.PushMatrix();
+		RenderTextOnScreen(meshList[GEO_TEXT], "AI: Dodge", Color(1, 0, 0), 5, 3, 90);
+		modelStack.PopMatrix();
+		break;
+	}
+
+	switch (state2)
+	{
+	case 1:
+		modelStack.PushMatrix();
+		RenderTextOnScreen(meshList[GEO_TEXT], "AI2: Patrol", Color(1, 0, 0), 5, 100, 90);
+		modelStack.PopMatrix();
+		break;
+
+	case 2:
+		modelStack.PushMatrix();
+		RenderTextOnScreen(meshList[GEO_TEXT], "AI2: Idle", Color(1, 0, 0), 5, 100, 90);
+		modelStack.PopMatrix();
+		break;
+
+	case 3:
+		modelStack.PushMatrix();
+		RenderTextOnScreen(meshList[GEO_TEXT], "AI2: Attack", Color(1, 0, 0), 5, 100, 90);
+		modelStack.PopMatrix();
+		break;
+
+	case 4:
+		modelStack.PushMatrix();
+		RenderTextOnScreen(meshList[GEO_TEXT], "AI2: Dodge", Color(1, 0, 0), 5, 100, 90);
+		modelStack.PopMatrix();
+		break;
+	}
+
+	modelStack.PushMatrix();
+	RenderTextOnScreen(meshList[GEO_TEXT], "AI: Red	| AI2: Purple", Color(1, 0, 0), 5, 40, 0);
+	modelStack.PopMatrix();
 }
 
 void AIMain::Exit()

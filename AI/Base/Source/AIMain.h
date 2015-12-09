@@ -39,7 +39,7 @@ public:
 	void RenderObjects();
 	GameObject* FetchGO();
 	void Render2DMesh(Mesh *mesh, const bool enableLight, const int size = 1, const int x = 0, const int y = 0, const bool rotate = false, const bool flip = false);
-	void RenderText(Mesh* mesh, std::string text, Color color);
+	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 
 	//Simple Variables
 	
@@ -60,7 +60,10 @@ private:
 	float m_worldWidth;
 	float m_worldHeight;
 	float rotateAngle;
-	
+	int state;
+	int state2;
+	int respawntime;
+
 	//For Sound (do only if have time)
 	irrklang::ISoundEngine* soundEngine;
 };

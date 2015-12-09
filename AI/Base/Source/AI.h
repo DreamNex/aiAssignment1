@@ -53,6 +53,7 @@ namespace MyAI
 		bool detected;
 		bool missed;
 		float offset;
+		int startPoint;
 
 		float probabilityIdle;
 		float probabilityDodge;
@@ -61,6 +62,8 @@ namespace MyAI
 
 		float probability;
 		Vector3 vel;
+		Vector3 nextPoint;
+		
 
 		const double rangeofFOV = 100;
 		const float playerRadius = 0.25;

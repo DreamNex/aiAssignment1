@@ -15,6 +15,7 @@
     <ClCompile Include="Source\Mtx44.cpp" />
     <ClCompile Include="Source\SP3DLC.cpp" />
     <ClCompile Include="Source\timer.cpp" />
+    <ClCompile Include="Source\Vector2.cpp" />
     <ClCompile Include="Source\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -23,6 +24,7 @@
     <ClInclude Include="Source\MyMath.h" />
     <ClInclude Include="Source\SP3DLC.h" />
     <ClInclude Include="Source\timer.h" />
+    <ClInclude Include="Source\Vector2.h" />
     <ClInclude Include="Source\Vector3.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

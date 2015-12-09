@@ -102,7 +102,7 @@ void SceneBase::Init()
 		meshList[i] = NULL;
 	}
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
-	meshList[GEO_BALL] = MeshBuilder::GenerateSphere("ball", Color(1, 1, 1), 10, 10, 1.f);
+	meshList[GEO_BALL] = MeshBuilder::GenerateSphere("ball", Color(1, 0, 1), 10, 10, 1.f);
 	meshList[GEO_WAYPOINTS] = MeshBuilder::GenerateSphere("waypoints", Color(1, 1, 1), 10, 10, 1.f);
 	meshList[GEO_BALL2] = MeshBuilder::GenerateSphere("ball2", Color(1, 0, 0), 10, 10, 1.f);
 	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", Color(1, 1, 1), 1.f);

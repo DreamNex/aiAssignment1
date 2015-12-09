@@ -18,13 +18,13 @@ int RandomInteger(int lowerLimit, int upperLimit)
 cAI::cAI()
 	: offset(10.f)
 	// Set another offset variable
-	,wayPointIndex(0)
-	,arrived(false)
-	,probabilityIdle(80.f)
+	, wayPointIndex(0)
+	, arrived(false)
+	, probabilityIdle(1.f)
 	, probabilityDodge(40.f)
 	, detected(false)
-
 	, timer(0)
+	, startPoint(0)
 
 {
 }
@@ -33,23 +33,24 @@ cAI::~cAI()
 {
 }
 
-Vector3 nextPoint;
-vector <Vector3> wayPoints, myStack;
+vector <Vector3> wayPoints;
 
 void cAI::init()
 {
 	wayPoints.push_back(Vector3(-offset, -offset, 1));
 	wayPoints.push_back(Vector3(-offset, offset, 1));
-	wayPoints.push_back(Vector3(offset, offset, 1));
+	wayPoints.push_back(Vector3(5, 5, 1));
 	wayPoints.push_back(Vector3(offset, -offset, 1));
-	wayPoints.push_back(Vector3(offset * 3, -offset * 3, 1));
+	wayPoints.push_back(Vector3(-offset * 5, -offset * 5, 1));
+	wayPoints.push_back(Vector3(-offset * 5, offset * 3, 1));
 	wayPoints.push_back(Vector3(offset * 3, offset * 3, 1));
-	wayPoints.push_back(Vector3(-offset * 3, offset * 3, 1));
-	wayPoints.push_back(Vector3(-offset * 3, -offset * 3, 1));
+	wayPoints.push_back(Vector3(offset * 3, -offset * 3, 1));
 	//pos.Set(wayPoints[0].x, wayPoints[0].y);
 	int randomIndex = RandomInteger(1, 3);
 	FSM2 = PATROL;
 	FSM1 = STOP1;
+	startPoint = RandomInteger(0, 7);
+	nextPoint = wayPoints[startPoint];
 }
 
 bool cAI::isVisible2D(const Vector3 &Position, float rotation, float FOV, const Vector3 &ObjectPosition)
@@ -75,46 +76,76 @@ bool cAI::isVisible2D(const Vector3 &Position, float rotation, float FOV, const 
 	return false;
 }
 
+FSM_TWO cAI::getState()
+{
+	return FSM2;
+}
+
+FSM_ONE cAI::getState2()
+{
+	return FSM1;
+}
+
 void cAI::update(double dt)
 {
 	switch (FSM2)
 	{
 		case PATROL:
-		{
-
-
-			if (myStack.size() == 0)
-				nextPoint = wayPoints[wayPointIndex];
-			else
-				nextPoint = myStack[myStack.size() - 1];
-
-			Vector3 direction = (nextPoint - pos).Normalize();
+		{		
+			
+			Vector3 direction = (nextPoint - pos);
 			float distance = GetDistance(pos.x, pos.y, nextPoint.x, nextPoint.y);
 
 			if (distance < 1)
 			{
-				pos = nextPoint;
 				arrived = true;
 			}
 			else
 			{
-				vel = (direction * AiSpeed * dt);
+				vel = (direction.Normalize() *AiSpeed * dt);
 				pos = pos + vel;
 			}
 
-			if (arrived)
+			if (arrived) // set the nextpoint to a waypoint that isnt where the AI currently is in
 			{
-				if (myStack.size() == 0)
+			
+				randNum = RandomInteger(0, 7);
+				wayPointIndex = randNum;
+				
+				if (nextPoint != wayPoints[wayPointIndex])
 				{
-					if (wayPointIndex == wayPoints.size() - 1)
-						wayPointIndex = 0;
-					else
-						wayPointIndex++;
+					nextPoint = wayPoints[wayPointIndex];
+				}
+				else if (nextPoint == wayPoints[wayPointIndex] && wayPointIndex == (wayPoints.size() - 1))
+				{
+					wayPointIndex--;
+					nextPoint = wayPoints[wayPointIndex];
+				}
+				else if (nextPoint == wayPoints[wayPointIndex] && wayPointIndex == 0)
+				{
+					wayPointIndex++;
+					nextPoint = wayPoints[wayPointIndex];
 				}
 				else
 				{
-					myStack.clear();
+					randNum = RandomInteger(1, 6);
+					if (randNum == wayPointIndex)
+					{
+						int relocate = RandomInteger(1, 2);
+						if (relocate == 1)
+						{
+							wayPointIndex--;
+							nextPoint = wayPoints[wayPointIndex];
+						}
+
+						else
+						{
+							wayPointIndex++;
+							nextPoint = wayPoints[wayPointIndex];
+						}
+					}
 				}
+
 				arrived = false;
 			}
 			// if probability == true, idle
@@ -130,12 +161,14 @@ void cAI::update(double dt)
 
 		case IDLE:
 		{
+				timer++;
 				// state = SCAN;
 				 if (timer >= 100)
 				 {
 					 FSM2 = PATROL;
+					 timer = 0;
 				 }
-				 timer++;
+				
 				 break;
 		}
 
@@ -166,20 +199,23 @@ void cAI::update(double dt)
 				   }
 				   else
 				   {
-					   Vector3 direction = (target->pos - pos).Normalize();
-					   vel = (direction * AiSpeed * dt);
+					   Vector3 direction = (target->pos - pos);
+					   vel = (direction.Normalize() * AiSpeed * dt);
 					   pos = pos + (vel);
 				   }
-				   if (missed != true)
+
+				   randNum = RandomInteger(1, 100);
+				   if (randNum <= probabilityDodge)
 				   {
-					   target->health--;
-					   //Translate it backwards abit to show that it got hit
-					   //target->pos;
-					   
+					   FSM1 = DODGE;
 				   }
 				   else
 				   {
-					   FSM1 = DODGE;
+					   target->health--;
+					   //Translate it backwards abit to show that it got hit
+					   target->pos.x-= 0.1f;
+					   target->pos.y-= 0.1f;
+					   
 				   }
 				   break;
 	}
