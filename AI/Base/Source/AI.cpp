@@ -17,9 +17,11 @@ int RandomInteger(int lowerLimit, int upperLimit)
 
 cAI::cAI()
 	: offset(10.f)
+	// Set another offset variable
 	,wayPointIndex(0)
 	,arrived(false)
-	,probability(30.f)
+	,probabilityIdle(30.f)
+	, probabilityDodge(40.f)
 	, detected(false)
 {
 }
@@ -37,10 +39,10 @@ void cAI::init()
 	wayPoints.push_back(Vector3(-offset, offset));
 	wayPoints.push_back(Vector3(offset, offset));
 	wayPoints.push_back(Vector3(offset, -offset));
-	wayPoints.push_back(Vector3(-offset + 10, -offset + 10));
-	wayPoints.push_back(Vector3(-offset + 10, offset + 10));
-	wayPoints.push_back(Vector3(offset + 10, offset + 10));
-	wayPoints.push_back(Vector3(offset + 10, -offset + 10));
+	wayPoints.push_back(Vector3(offset * 5, -offset * 5));
+	wayPoints.push_back(Vector3(offset * 5, offset * 5));
+	wayPoints.push_back(Vector3(-offset * 5, offset * 5));
+	wayPoints.push_back(Vector3(-offset * 5, -offset * 5));
 	//pos.Set(wayPoints[0].x, wayPoints[0].y);
 	int randomIndex = RandomInteger(1, 3);
 	FSM2 = PATROL;
@@ -111,7 +113,7 @@ void cAI::update(double dt)
 			}
 			// if probability == true, idle
 			randNum = RandomInteger(1, 100);
-			if (randNum <= probability)
+			if (randNum <= probabilityIdle)
 			{
 				FSM2 = IDLE;
 			}
@@ -126,7 +128,7 @@ void cAI::update(double dt)
 				// state = SCAN;
 				 for (int timer = 0; timer < 500; timer++)
 				 {
-					 if (timer == 100)
+					 if (timer == 500)
 					 {
 						 FSM2 = PATROL;
 					 }
@@ -146,21 +148,24 @@ void cAI::update(double dt)
 
 	switch (FSM1)
 	{
-	case ATTACK:
-	{
-
-				   if (missed != true)
-				   {
-					   target->health--;
-					   
-				   }
-				   break;
-	}
-	case DODGE:
-	{
-				  FSM1 = ATTACK;
-				  break;
-	}
+		case ATTACK:
+		{
+			randNum = RandomInteger(1, 100);
+			if (randNum <= probabilityDodge)
+			{
+				FSM1 = DODGE;
+			}
+			else
+			{
+				target->health--;
+			}
+			break;
+		}
+		case DODGE:
+		{
+			FSM1 = ATTACK;
+			break;
+		}
 	}
 
 	if ((pos - target->pos).Length() < 4)
@@ -168,4 +173,14 @@ void cAI::update(double dt)
 		FSM2 = DETECTED;
 		FSM1 = STOP1;
 	}
+}
+
+FSM_TWO cAI::getState()
+{
+	return FSM2;
+}
+
+FSM_ONE cAI::getState2()
+{
+	return FSM1;
 }

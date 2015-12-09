@@ -39,6 +39,7 @@ public:
 	void RenderObjects();
 	GameObject* FetchGO();
 	void Render2DMesh(Mesh *mesh, const bool enableLight, const int size = 1, const int x = 0, const int y = 0, const bool rotate = false, const bool flip = false);
+	void RenderText(Mesh* mesh, std::string text, Color color);
 
 	//Simple Variables
 	

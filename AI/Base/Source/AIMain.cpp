@@ -65,6 +65,28 @@ void AIMain::Update(double dt)
 		{
 			ai->update(dt);
 		}
+
+		switch (ai->getState())
+		{
+		case PATROL:
+			RenderText(meshList[GEO_TEXT], "Patrol", Color(0, 1, 0));
+			break;
+
+		case IDLE:
+			RenderText(meshList[GEO_TEXT], "Idle", Color(0, 1, 0));
+			break;
+		}
+
+		switch (ai->getState2())
+		{
+		case ATTACK:
+			RenderText(meshList[GEO_TEXT], "Attack", Color(0, 1, 0));
+			break;
+
+		case DODGE:
+			RenderText(meshList[GEO_TEXT], "Dodge", Color(0, 1, 0));
+			break;
+		}
 	}
 }
 
@@ -140,6 +162,33 @@ void AIMain::RenderGO()
 		RenderMesh(m_goList[i]->mesh, false);
 		modelStack.PopMatrix();
 	}
+}
+
+void AIMain::RenderText(Mesh* mesh, std::string text, Color color)
+{
+	if (!mesh || mesh->textureID <= 0)
+		return;
+
+	glDisable(GL_DEPTH_TEST);
+	glUniform1i(m_parameters[U_TEXT_ENABLED], 1);
+	glUniform3fv(m_parameters[U_TEXT_COLOR], 1, &color.r);
+	glUniform1i(m_parameters[U_LIGHTENABLED], 0);
+	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, mesh->textureID);
+	glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
+	for (unsigned i = 0; i < text.length(); ++i)
+	{
+		Mtx44 characterSpacing;
+		characterSpacing.SetToTranslation(i * 0.8f, 0, 0); //1.0f is the spacing of each character, you may change this value
+		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
+		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+		mesh->Render((unsigned)text[i] * 6, 6);
+	}
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
+	glEnable(GL_DEPTH_TEST);
 }
 
 void AIMain::RenderObjects()
