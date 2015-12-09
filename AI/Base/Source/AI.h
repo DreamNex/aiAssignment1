@@ -56,7 +56,6 @@ namespace MyAI
 
 		float probabilityIdle;
 		float probabilityDodge;
-		cAI* target;
 		int timer;
 
 

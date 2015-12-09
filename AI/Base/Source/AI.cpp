@@ -38,14 +38,14 @@ vector <Vector3> wayPoints, myStack;
 
 void cAI::init()
 {
-	wayPoints.push_back(Vector3(-offset, -offset));
-	wayPoints.push_back(Vector3(-offset, offset));
-	wayPoints.push_back(Vector3(offset, offset));
-	wayPoints.push_back(Vector3(offset, -offset));
-	wayPoints.push_back(Vector3(offset * 3, -offset * 3));
-	wayPoints.push_back(Vector3(offset * 3, offset * 3));
-	wayPoints.push_back(Vector3(-offset * 3, offset * 3));
-	wayPoints.push_back(Vector3(-offset * 3, -offset * 3));
+	wayPoints.push_back(Vector3(-offset, -offset, 1));
+	wayPoints.push_back(Vector3(-offset, offset, 1));
+	wayPoints.push_back(Vector3(offset, offset, 1));
+	wayPoints.push_back(Vector3(offset, -offset, 1));
+	wayPoints.push_back(Vector3(offset * 3, -offset * 3, 1));
+	wayPoints.push_back(Vector3(offset * 3, offset * 3, 1));
+	wayPoints.push_back(Vector3(-offset * 3, offset * 3, 1));
+	wayPoints.push_back(Vector3(-offset * 3, -offset * 3, 1));
 	//pos.Set(wayPoints[0].x, wayPoints[0].y);
 	int randomIndex = RandomInteger(1, 3);
 	FSM2 = PATROL;
