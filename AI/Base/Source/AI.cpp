@@ -23,7 +23,9 @@ cAI::cAI()
 	,probabilityIdle(80.f)
 	, probabilityDodge(40.f)
 	, detected(false)
+
 	, timer(0)
+
 {
 }
 
@@ -95,7 +97,10 @@ void cAI::update(double dt)
 				arrived = true;
 			}
 			else
-				pos = pos + (direction * AiSpeed *dt);
+			{
+				vel = (direction * AiSpeed * dt);
+				pos = pos + vel;
+			}
 
 			if (arrived)
 			{
@@ -136,9 +141,12 @@ void cAI::update(double dt)
 
 		case DETECTED:
 		{
+						 if (detected == true)
+						 {
 
-						 FSM1 = ATTACK;
-						 FSM2 = STOP2;
+							 FSM1 = ATTACK;
+							 FSM2 = STOP2;
+						 }
 						 break;
 		}
 	
@@ -146,39 +154,52 @@ void cAI::update(double dt)
 
 	switch (FSM1)
 	{
-		case ATTACK:
-		{
-			randNum = RandomInteger(1, 100);
-			if (randNum <= probabilityDodge)
-			{
-				FSM1 = DODGE;
-			}
-			else
-			{
-				target->health--;
-			}
-			break;
-		}
-		case DODGE:
-		{
-			FSM1 = ATTACK;
-			break;
-		}
+	case ATTACK:
+	{
+
+				   
+
+				   if ((target->pos - pos).Length() <= 12)
+				   {
+					   vel.SetZero();
+					   
+				   }
+				   else
+				   {
+					   Vector3 direction = (target->pos - pos).Normalize();
+					   vel = (direction * AiSpeed * dt);
+					   pos = pos + (vel);
+				   }
+				   if (missed != true)
+				   {
+					   target->health--;
+					   //Translate it backwards abit to show that it got hit
+					   //target->pos;
+					   
+				   }
+				   else
+				   {
+					   FSM1 = DODGE;
+				   }
+				   break;
+	}
+	case DODGE:
+	{
+				  FSM1 = ATTACK;
+				  break;
+	}
 	}
 
-	/*if ((pos - target->pos).Length() < 4)
+	if ((target->pos - pos).Length() <= 20 && (target->pos - pos).Length() >= 12)
 	{
-		FSM2 = DETECTED;
-		FSM1 = STOP1;
-	}*/
-}
+		vel.SetZero();
 
-FSM_TWO cAI::getState()
-{
-	return FSM2;
-}
+		if (detected == false)
+		{
 
-FSM_ONE cAI::getState2()
-{
-	return FSM1;
+			detected = true;
+			FSM2 = DETECTED;
+		}
+	}
+	
 }

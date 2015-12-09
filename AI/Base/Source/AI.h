@@ -32,12 +32,17 @@ namespace MyAI
 
 		void init();
 		void update(double dt);
+
 		FSM_ONE getState2();
 		FSM_TWO getState();
+
+		//void RenderState(Mesh* mesh, std::string text, Color color);
+
 
 		FSM_ONE FSM1;
 		FSM_TWO FSM2;
 		bool isVisible2D(const Vector3 &Position, float rotation, float FOV, const Vector3 &ObjectPosition);
+		cAI* target;
 
 	private:
 		//Waypoints and states
@@ -48,10 +53,15 @@ namespace MyAI
 		bool detected;
 		bool missed;
 		float offset;
+
 		float probabilityIdle;
 		float probabilityDodge;
 		cAI* target;
 		int timer;
+
+
+		float probability;
+		Vector3 vel;
 
 		const double rangeofFOV = 100;
 		const float playerRadius = 0.25;

@@ -60,7 +60,7 @@ private:
 	float m_worldWidth;
 	float m_worldHeight;
 	float rotateAngle;
-
+	
 	//For Sound (do only if have time)
 	irrklang::ISoundEngine* soundEngine;
 };

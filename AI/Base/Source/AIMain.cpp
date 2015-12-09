@@ -39,20 +39,25 @@ void AIMain::Init()
 
 	srand((unsigned)time(NULL));
 	
-	cAI *ai = new cAI();
+	cAI* ai = new cAI();
 	ai->active = true;
-	ai->pos.Set(0, 0, 0);
+	ai->pos.Set(-10, -10, 0);
 	ai->scale.Set(1, 1, 1);
 	ai->mesh = meshList[GEO_BALL];
+	
 	ai->init();
 	m_goList.push_back(ai);
 
-	/*AI1 = new cAI();
-	AI1->active = true;
-	AI1->pos.Set(10, 0, 0);
-	AI1->scale.Set(1, 1, 1);
-	AI1->mesh = meshList[GEO_BALL2];
-	m_goList.push_back(AI1);*/
+	cAI* ai2 = new cAI();
+	ai2->active = true;
+	ai2->pos.Set(10, 10, 0);
+	ai2->scale.Set(1, 1, 1);
+	ai2->mesh = meshList[GEO_BALL2];
+	ai2->init();
+	m_goList.push_back(ai2);
+
+	ai->target = ai2;
+	ai2->target = ai;
 }
 
 void AIMain::Update(double dt)
