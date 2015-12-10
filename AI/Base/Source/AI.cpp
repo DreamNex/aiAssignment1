@@ -21,7 +21,7 @@ cAI::cAI()
 	, wayPointIndex(0)
 	, arrived(false)
 	, probabilityIdle(1.f)
-	, probabilityDodge(40.f)
+	, probabilityDodge(30.f)
 	, detected(false)
 	, timer(0)
 	, startPoint(0)
@@ -213,8 +213,8 @@ void cAI::update(double dt)
 				   {
 					   target->health--;
 					   //Translate it backwards abit to show that it got hit
-					   target->pos.x-= 0.1f;
-					   target->pos.y-= 0.1f;
+					   //target->pos.x-= 0.1f;
+					  // target->pos.y-= 0.1f;
 					   
 				   }
 				   break;
@@ -238,4 +238,12 @@ void cAI::update(double dt)
 		}
 	}
 	
+}
+
+Vector3 cAI::getRandPos()
+{
+	Vector3 temp;
+	temp.x = RandomInteger(-30, 30);
+	temp.y = RandomInteger(-30, 30);
+	return temp;
 }

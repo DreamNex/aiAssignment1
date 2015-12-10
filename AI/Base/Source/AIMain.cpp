@@ -95,7 +95,7 @@ void AIMain::Update(double dt)
 			break;
 		case DODGE:
 			state = 4;
-			state = 4;
+			state2 = 4;
 			break;
 		}
 
@@ -104,19 +104,23 @@ void AIMain::Update(double dt)
 			ai->active = false;
 			respawntime = 6;
 		}
-
+		
 		if (ai->active == false)
 		{
-			respawntime--;
-		}
-		
-		if (respawntime == 0)
-		{
 			ai->active = true;
+			ai->health = 10;
+			ai->pos = ai->getRandPos();
+			ai->FSM1 = STOP1;
+			ai->FSM2 = PATROL;
+		}
+
+		else
+		{
+			ai->update(dt);
 		}
 	}
 
-	
+	respawntime--;
 }
 
 void AIMain::Render2DMesh(Mesh *mesh, bool enableLight, int size, int x, int y, bool rotate, bool flip)

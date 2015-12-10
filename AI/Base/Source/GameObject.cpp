@@ -7,7 +7,7 @@ GameObject::GameObject(GAMEOBJECT_TYPE typeValue)
 	active(false),
 	mass(1.f),
 	homing(NULL),
-	health(3)
+	health(10)
 {
 }
 

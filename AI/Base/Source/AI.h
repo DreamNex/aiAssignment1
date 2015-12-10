@@ -38,7 +38,7 @@ namespace MyAI
 
 		//void RenderState(Mesh* mesh, std::string text, Color color);
 
-
+		Vector3 getRandPos();
 		FSM_ONE FSM1;
 		FSM_TWO FSM2;
 		bool isVisible2D(const Vector3 &Position, float rotation, float FOV, const Vector3 &ObjectPosition);
