@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include <vector>
 #include "SP3DLC.h"
+#include "MessageBoard.h"
 
 namespace MyAI
 {
@@ -11,16 +12,19 @@ namespace MyAI
 	{
 		ATTACK,
 		DODGE,
-		RESET,
+		SWAP,
+		CONFRONT,
 		STOP1,
 		
 	};
 
 	enum FSM_TWO
 	{
-		PATROL,
-		DETECTED,
-		IDLE,
+		SWAP2,
+		VOLUNTEER,
+		AGGRESSIVE,
+		NEXT, // This might be removed
+		HEAL, // Only for AIs that are medics
 		STOP2,
 		
 	};
@@ -44,6 +48,8 @@ namespace MyAI
 		bool isVisible2D(const Vector3 &Position, float rotation, float FOV, const Vector3 &ObjectPosition);
 		cAI* target;
 
+		MessageBoard mbController;
+	
 	private:
 		//Waypoints and states
 
@@ -54,6 +60,7 @@ namespace MyAI
 		bool missed;
 		float offset;
 		int startPoint;
+		unsigned int ID;
 
 		float probabilityIdle;
 		float probabilityDodge;
@@ -65,11 +72,11 @@ namespace MyAI
 		Vector3 nextPoint;
 		
 
-		const double rangeofFOV = 100;
-		const float playerRadius = 0.25;
-		const float enemyRadius = 0.1f;
-		const float proximity = 0.4f;
-		const float AiSpeed = 10.f;
+		//const double rangeofFOV = 100;
+		//const float playerRadius = 0.25;
+		//const float enemyRadius = 0.1f;
+		//const float proximity = 0.4f;
+		
 	};
 }
 #endif

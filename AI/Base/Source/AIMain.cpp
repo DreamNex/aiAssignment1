@@ -39,25 +39,7 @@ void AIMain::Init()
 
 	srand((unsigned)time(NULL));
 	
-	cAI* ai = new cAI();
-	ai->active = true;
-	ai->pos.Set(-30, -30, 1);
-	ai->scale.Set(1, 1, 1);
-	ai->mesh = meshList[GEO_BALL];
 	
-	ai->init();
-	m_goList.push_back(ai);
-
-	cAI* ai2 = new cAI();
-	ai2->active = true;
-	ai2->pos.Set(30, 30, 1);
-	ai2->scale.Set(1, 1, 1);
-	ai2->mesh = meshList[GEO_BALL2];
-	ai2->init();
-	m_goList.push_back(ai2);
-
-	ai->target = ai2;
-	ai2->target = ai;
 
 	state = 1;
 	state2 = 1;
@@ -75,49 +57,9 @@ void AIMain::Update(double dt)
 			ai->update(dt);
 		}
 
-		switch (ai->getState())
+		/*switch (ai->getState())
 		{
-		case PATROL:
-			state = 1;
-			state2 = 1;
-			break;
-		case IDLE:
-			state = 2;
-			state2 = 2;
-			break;
-		}
-
-		switch (ai->getState2())
-		{
-		case ATTACK:
-			state = 3;
-			state2 = 3;
-			break;
-		case DODGE:
-			state = 4;
-			state2 = 4;
-			break;
-		}
-
-		if (ai->health == 0)
-		{
-			ai->active = false;
-			respawntime = 6;
-		}
-		
-		if (ai->active == false)
-		{
-			ai->active = true;
-			ai->health = 10;
-			ai->pos = ai->getRandPos();
-			ai->FSM1 = STOP1;
-			ai->FSM2 = PATROL;
-		}
-
-		else
-		{
-			ai->update(dt);
-		}
+		}*/
 	}
 
 	respawntime--;
