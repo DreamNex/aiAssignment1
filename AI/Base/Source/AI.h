@@ -40,15 +40,21 @@ namespace MyAI
 		FSM_ONE getState2();
 		FSM_TWO getState();
 
+		void SetAITarget(cAI* target);
+
+		unsigned int GetTeamID();
+		void SetTeamID(unsigned int teamID);
 		//void RenderState(Mesh* mesh, std::string text, Color color);
 
 		Vector3 getRandPos();
 		FSM_ONE FSM1;
 		FSM_TWO FSM2;
-		bool isVisible2D(const Vector3 &Position, float rotation, float FOV, const Vector3 &ObjectPosition);
-		cAI* target;
 
 		MessageBoard mbController;
+		std::string Sender;
+		std::string Reciever;
+		std::string Command;
+		std::string Command2;
 	
 	private:
 		//Waypoints and states
@@ -56,15 +62,19 @@ namespace MyAI
 		unsigned int wayPointIndex;
 		int randNum;
 		bool arrived;
-		bool detected;
+		bool isFighting;
+		bool SwapAI;
+		bool Volunteer;
 		bool missed;
 		float offset;
 		int startPoint;
 		unsigned int ID;
+		unsigned int teamID;
 
 		float probabilityIdle;
 		float probabilityDodge;
 		int timer;
+		cAI* target;
 
 
 		float probability;

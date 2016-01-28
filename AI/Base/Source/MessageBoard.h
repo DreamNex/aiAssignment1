@@ -6,7 +6,7 @@ public:
 	MessageBoard();
 	~MessageBoard();
 
-	std::string GetMessage();
+	std::string Getmessage();
 	void SetMessage(std::string message);
 
 	std::string GetFromMessage();

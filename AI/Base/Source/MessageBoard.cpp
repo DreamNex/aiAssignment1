@@ -11,7 +11,7 @@ MessageBoard::~MessageBoard()
 }
 
 //Get the message that is meant to sent from AI to AI
-std::string MessageBoard::GetMessage()
+std::string MessageBoard::Getmessage()
 {
 	return message;
 }

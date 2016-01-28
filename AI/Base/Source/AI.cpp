@@ -1,5 +1,5 @@
 #include "AI.h"
-
+#include "timer.h"
 using namespace MyAI;
 using namespace std;
 
@@ -22,8 +22,10 @@ cAI::cAI()
 	, arrived(false)
 	, probabilityIdle(1.f)
 	, probabilityDodge(30.f)
-	, detected(false)
+	, isFighting(false)
+	, Volunteer(false)
 	, timer(0)
+	, teamID(0)
 	, startPoint(0)
 	
 
@@ -39,7 +41,7 @@ const float AiSpeed = 10.f;
 
 void cAI::init()
 {
-
+	srand(time(NULL));
 	wayPoints.push_back(Vector3(-offset, -offset, 1));
 	wayPoints.push_back(Vector3(-offset, offset, 1));
 	wayPoints.push_back(Vector3(5, 5, 1));
@@ -56,27 +58,9 @@ void cAI::init()
 	nextPoint = wayPoints[startPoint];
 }
 
-bool cAI::isVisible2D(const Vector3 &Position, float rotation, float FOV, const Vector3 &ObjectPosition)
+void cAI::SetAITarget(cAI* target)
 {
-	float lookingOBJ = CalAnglefromPosition2D(ObjectPosition, Position);
-	float cameraRotation = rotation;
-	bool LO = false, CR = false;
-
-	if (lookingOBJ - cameraRotation > 180.f)
-	{
-		lookingOBJ -= 360.f;
-	}
-	else if (lookingOBJ - cameraRotation < -180.f)
-	{
-		lookingOBJ += 360.f;
-	}
-
-	if ((lookingOBJ + FOV > cameraRotation && lookingOBJ - FOV < cameraRotation))
-	{
-		return true;
-	}
-
-	return false;
+	this->target = target;
 }
 
 FSM_TWO cAI::getState()
@@ -91,20 +75,59 @@ FSM_ONE cAI::getState2()
 
 void cAI::update(double dt)
 {
+	for (int i = 0; i < mbController.Getmessage().length(); ++i)
+	{
+		mbController.Getmessage()[i] = tolower(mbController.Getmessage()[i]);
+	}
 	switch (FSM2)
 	{
 	case SWAP2:
 	{
+				  if (health <= 1)
+				  {
+					  if (rand() % 101 > 45)
+					  {
+						  mbController.SetMessage("swap");
+						  if (mbController.Getmessage() == "swap")
+						  {
+							  isFighting = false;
+							  SwapAI = true;
+							  FSM2 = VOLUNTEER;
+						  }
+					  }
+
+					  else
+					  {
+
+					  }
+				  }
 				  break;
 	}
 		
 	case VOLUNTEER:
 	{
-					  break;
+					  if (mbController.Getmessage() == "swap")
+					  {
+
+						  if (SwapAI == true)
+						  {
+							  if (rand() % 101 > 30);
+							  {
+								  Volunteer = true;
+							  }
+						  }
+					  }
+					 break;
 	}
 
 	case AGGRESSIVE:
 	{
+
+					   isFighting = true;
+					   if (Volunteer)
+					   {
+						   //Next in line would be the person who volunteer
+					   }
 					   break;
 	}
 	
@@ -149,18 +172,6 @@ void cAI::update(double dt)
 				  FSM1 = ATTACK;
 				  break;
 	}
-	}
-
-	if ((target->pos - pos).Length() <= 20 && (target->pos - pos).Length() >= 12)
-	{
-		vel.SetZero();
-
-		if (detected == false)
-		{
-
-			detected = true;
-			//FSM2 = DETECTED;
-		}
 	}// this bracket is the end of the switch case
 	
 }
