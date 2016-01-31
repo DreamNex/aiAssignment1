@@ -3,11 +3,19 @@
 
 MessageBoard::MessageBoard()
 {
+	Commands[0] = "Swap";
+	Commands[1] = "Assit Me!";
+	Commands[2] = "Medic!";
 }
 
 
 MessageBoard::~MessageBoard()
 {
+}
+
+std::string MessageBoard::GetCommand(int index)
+{
+	return Commands[index];
 }
 
 //Get the message that is meant to sent from AI to AI
