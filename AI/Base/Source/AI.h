@@ -22,8 +22,6 @@ namespace MyAI
 	{
 		SWAP2,
 		VOLUNTEER,
-		AGGRESSIVE,
-		NEXT, // This might be removed
 		HEAL, // Only for AIs that are medics
 		STOP2,
 		
@@ -53,8 +51,6 @@ namespace MyAI
 		MessageBoard mbController;
 		std::string Sender;
 		std::string Reciever;
-		std::string Command;
-		std::string Command2;
 	
 	private:
 		//Waypoints and states

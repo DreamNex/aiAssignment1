@@ -13,6 +13,16 @@ MessageBoard::~MessageBoard()
 {
 }
 
+int MessageBoard::GetSenderID()
+{
+	return senderid;
+}
+
+void MessageBoard::SetSenderID(unsigned int senderid)
+{
+	this->senderid = senderid;
+}
+
 std::string MessageBoard::GetCommand(int index)
 {
 	return Commands[index];

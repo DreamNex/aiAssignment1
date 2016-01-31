@@ -87,8 +87,7 @@ void cAI::update(double dt)
 				  {
 					  if (rand() % 101 > 45)
 					  {
-						  mbController.SetMessage("swap");
-						  if (mbController.Getmessage() == "swap")
+						  if (mbController.Getmessage() == mbController.GetCommand(1))
 						  {
 							  isFighting = false;
 							  SwapAI = true;
@@ -106,29 +105,34 @@ void cAI::update(double dt)
 		
 	case VOLUNTEER:
 	{
-					  if (mbController.Getmessage() == "swap")
+					  if (mbController.GetSenderID == teamID)
 					  {
 
-						  if (SwapAI == true)
+						  if (mbController.Getmessage() == mbController.GetCommand(1));
 						  {
-							  if (rand() % 101 > 30);
+
+							  if (SwapAI == true)
 							  {
-								  Volunteer = true;
+								  if (rand() % 101 > 30);
+								  {
+									  Volunteer = true;
+								  }
 							  }
 						  }
 					  }
 					 break;
 	}
 
-	case AGGRESSIVE:
+	case HEAL:
 	{
+				 if (mbController.GetSenderID == teamID)
+				 {
+					 if (mbController.Getmessage() == mbController.GetCommand(3))
+					 {
 
-					   isFighting = true;
-					   if (Volunteer)
-					   {
-						   //Next in line would be the person who volunteer
-					   }
-					   break;
+						 //Set waypoint to the sender's position which will be a waypoint.
+					 }
+				 }
 	}
 	
 	}// this bracket is the end of the switch case

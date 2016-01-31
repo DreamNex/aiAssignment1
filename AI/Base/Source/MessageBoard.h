@@ -17,6 +17,9 @@ public:
 
 	std::string GetCommand(int index);
 
+	int GetSenderID();
+	void SetSenderID(unsigned int senderid);
+
 	void ResetMessageBoard();
 private:
 
@@ -24,6 +27,8 @@ private:
 	std::string From;
 	std::string To;
 	std::string Commands[3];
+
+	unsigned int senderid;
 	
 };
 
