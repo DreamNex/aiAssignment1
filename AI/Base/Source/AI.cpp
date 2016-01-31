@@ -22,6 +22,7 @@ cAI::cAI()
 	, arrived(false)
 	, probabilityIdle(1.f)
 	, probabilityDodge(30.f)
+	, probabilityAssist(50.f)
 	, isFighting(false)
 	, Volunteer(false)
 	, timer(0)
@@ -175,6 +176,44 @@ void cAI::update(double dt)
 	{
 				  FSM1 = ATTACK;
 				  break;
+	}
+	case SWAP:
+	{
+		if (FSM1 == ATTACK && health <= 2)
+		{
+			mbController.SetMessage(mbController.GetCommand(0));
+			if (mbController.Getmessage() == mbController.GetCommand(0))
+			{
+				isFighting = false;
+				SwapAI = true;
+			}
+		}
+		break;
+	}
+	case CONFRONT:
+	{
+		if (isFighting == false && health >= 4)
+		{
+			mbController.SetMessage(mbController.GetCommand(3));
+			FSM1 = ATTACK;
+		}
+		break;
+	}
+	case ASSIST:
+	{
+		if (FSM1 == ATTACK && health <= 2)
+		{
+			randNum = RandomInteger(1, 100);
+			if (randNum <= probabilityAssist)
+			{
+				// Move soldier to leader pos
+			}
+		}
+		else
+		{
+			FSM1 = SWAP;
+		}
+		break;
 	}
 	}// this bracket is the end of the switch case
 	

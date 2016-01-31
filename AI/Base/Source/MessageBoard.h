@@ -26,7 +26,7 @@ private:
 	std::string message;
 	std::string From;
 	std::string To;
-	std::string Commands[3];
+	std::string Commands[4];
 
 	unsigned int senderid;
 	

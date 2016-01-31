@@ -14,6 +14,7 @@ namespace MyAI
 		DODGE,
 		SWAP,
 		CONFRONT,
+		ASSIST,
 		STOP1,
 		
 	};
@@ -69,6 +70,7 @@ namespace MyAI
 
 		float probabilityIdle;
 		float probabilityDodge;
+		float probabilityAssist;
 		int timer;
 		cAI* target;
 

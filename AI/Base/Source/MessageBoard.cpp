@@ -6,6 +6,7 @@ MessageBoard::MessageBoard()
 	Commands[0] = "Swap";
 	Commands[1] = "Assit Me!";
 	Commands[2] = "Medic!";
+	Commands[3] = "Moving Up";
 }
 
 
