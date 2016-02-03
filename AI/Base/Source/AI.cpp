@@ -20,9 +20,6 @@ cAI::cAI()
 	// Set another offset variable
 	, wayPointIndex(0)
 	, arrived(false)
-	, probabilityIdle(1.f)
-	, probabilityDodge(30.f)
-	, probabilityAssist(50.f)
 	, isFighting(false)
 	, Volunteer(false)
 	, timer(0)
@@ -35,7 +32,7 @@ cAI::~cAI()
 {
 }
 
-vector <Vector3> wayPoints;
+//vector <Vector3> wayPoints;
 const float AiSpeed = 10.f;
 
 void cAI::init()
@@ -45,8 +42,8 @@ void cAI::init()
 	int randomIndex = RandomInteger(1, 3);
 	FSM2 = STOP2;
 	FSM1 = STOP1;
-	startPoint = RandomInteger(0, 7);
-	nextPoint = wayPoints[startPoint];
+	//startPoint = RandomInteger(0, 7);
+	//nextPoint = wayPoints[startPoint];
 }
 
 void cAI::SetAITarget(cAI* target)
@@ -62,6 +59,16 @@ FSM_TWO cAI::getState()
 FSM_ONE cAI::getState2()
 {
 	return FSM1;
+}
+
+void cAI::SetFightPt(Vector3 fightingPoint)
+{
+	this->fightingPoint = fightingPoint;
+}
+
+Vector3 cAI::GetFightPt()
+{
+	return fightingPoint;
 }
 
 void cAI::update(double dt)
@@ -116,94 +123,96 @@ void cAI::update(double dt)
 
 	case HEAL:
 	{
-				 if (mbController.GetSenderID() == teamID)
-				 {
-					 if (mbController.Getmessage() == mbController.GetCommand(3))
-					 {
+		if (mbController.GetSenderID() == teamID)
+		{
+			if (mbController.Getmessage() == mbController.GetCommand(3))
+			{
 
-						 //Set waypoint to the sender's position which will be a waypoint.
-					 }
-				 }
+				//Set waypoint to the sender's position which will be a waypoint.
+			}
+		}
 	}
 	
 	}// this bracket is the end of the switch case
 
 	switch (FSM1)
 	{
-	case ATTACK:
-	{
-		if ((target->pos - pos).Length() <= 12)
-		{
-			vel.SetZero();
 
-		}
-		else
-		{
-			Vector3 direction = (target->pos - pos);
-			vel = (direction.Normalize() * AiSpeed * dt);
-			pos = pos + (vel);
-		}
-
-		randNum = RandomInteger(1, 100);
-		if (randNum <= probabilityDodge)
-		{
-			FSM1 = DODGE;
-		}
-		else
-		{
-			target->health--;
-			//Translate it backwards abit to show that it got hit
-			//target->pos.x-= 0.1f;
-			// target->pos.y-= 0.1f;
-
-		}
-		break;
-	}
-	case DODGE:
+	case AGGRESIVE:
 	{
-		FSM1 = ATTACK;
-		break;
-	}
-	case SWAP:
-	{
-		if (FSM1 == ATTACK && health <= 2)
-		{
-			mbController.SetMessage(mbController.GetCommand(0));
-			if (mbController.Getmessage() == mbController.GetCommand(0))
-			{
-				isFighting = false;
-				SwapAI = true;
-			}
-		}
-		break;
-	}
-	case CONFRONT:
-	{
-		if (isFighting == false && health >= 4)
+		if (isFighting == true && health >= 4)
 		{
 			mbController.SetMessage(mbController.GetCommand(3));
-			FSM1 = ATTACK;
-		}
-		break;
-	}
-	case ASSIST:
-	{
-		if (FSM1 == ATTACK && health <= 2)
-		{
-			randNum = RandomInteger(1, 100);
-			if (randNum <= probabilityAssist)
+			Vector3 direction;
+
+			// Makes AI move toward waypoint
+			if (arrived == false)
 			{
-				// Move soldier to leader pos
+				direction = fightingPoint - pos;
+				vel = direction.Normalize() * AiSpeed * dt;
+				pos += vel;
 			}
 			else
 			{
-				FSM1 = SWAP;
+				if (rand() % 100 > 50)
+				{
+					FSM1 = DODGE;
+				}
+				else
+				{
+					target->health--;
+					//Translate it backwards abit to show that it got hit
+					//target->pos.x-= 0.1f;
+					// target->pos.y-= 0.1f;
+
+				}
+				if (health <= 2)
+				{
+					FSM1 = SWAP;
+					mbController.SetMessage(mbController.GetCommand(0));
+				}
+				if (health <= 4)
+				{
+					FSM1 = ASSIST;
+					mbController.SetMessage(mbController.GetCommand(1));
+				}
 			}
 		}
 		break;
 	}
+
+	case DODGE:
+	{
+		FSM1 = AGGRESIVE;
+		break;
+	}
+
+	case SWAP:
+	{
+		if (mbController.Getmessage() == mbController.GetCommand(0) && mbController.GetSenderID() == teamID)
+		{
+			isFighting = false;
+			SwapAI = true;
+			FSM2 = SWAP2;
+		}
+
+		break;
+	}
+
+	case ASSIST:
+	{
+		if (mbController.Getmessage() == mbController.GetCommand(1) && mbController.GetSenderID() == teamID)
+		{
+			if (rand() % 100 > 45)
+			{
+				FSM2 = VOLUNTEER;
+			}	
+		}
+		break;
+	}
+
 	}// this bracket is the end of the switch case
-	
+
 }
 
 Vector3 cAI::getRandPos()

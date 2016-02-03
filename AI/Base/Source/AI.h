@@ -10,10 +10,9 @@ namespace MyAI
 {
 	enum FSM_ONE
 	{
-		ATTACK,
 		DODGE,
 		SWAP,
-		CONFRONT,
+		AGGRESIVE,
 		ASSIST,
 		STOP1,
 		
@@ -44,6 +43,8 @@ namespace MyAI
 		unsigned int GetTeamID();
 		void SetTeamID(unsigned int teamID);
 		//void RenderState(Mesh* mesh, std::string text, Color color);
+		void SetFightPt(Vector3 fightingPoint);
+		Vector3 GetFightPt();
 
 		Vector3 getRandPos();
 		FSM_ONE FSM1;
@@ -52,8 +53,6 @@ namespace MyAI
 		MessageBoard mbController;
 		std::string Sender;
 		std::string Reciever;
-
-		Vector3 leaderPos, soldierPos, medicPos;
 	
 	private:
 		//Waypoints and states
@@ -70,9 +69,6 @@ namespace MyAI
 		unsigned int ID;
 		unsigned int teamID;
 
-		float probabilityIdle;
-		float probabilityDodge;
-		float probabilityAssist;
 		int timer;
 		cAI* target;
 
@@ -80,6 +76,7 @@ namespace MyAI
 		float probability;
 		Vector3 vel;
 		Vector3 nextPoint;
+		Vector3 fightingPoint;
 		
 
 		//const double rangeofFOV = 100;
