@@ -39,12 +39,68 @@ void AIMain::Init()
 
 	srand((unsigned)time(NULL));
 	
-	WayPoints[0].Set(25, 20, 1);
-	WayPoints[1].Set(25, 70, 0);
-	WayPoints[2].Set(55, 45, 0);
-	WayPoints[3].Set(110, 20, 0);
-	WayPoints[4].Set(110, 70, 0);
-	WayPoints[5].Set(80, 45, 0);
+	WayPoints[0].Set(25, 20, 0);	// soldier1 pos
+	WayPoints[1].Set(25, 70, 0);	// medic1 pos
+	WayPoints[2].Set(55, 45, 0);	// attack1 pos
+	WayPoints[3].Set(110, 20, 0);	// soldier2 pos
+	WayPoints[4].Set(110, 70, 0);	// medic2 pos
+	WayPoints[5].Set(80, 45, 0);	// attack2 pos
+	WayPoints[6].Set(25, 45, 0);	// leader1 pos
+	WayPoints[7].Set(110, 45, 0);	// leader2 pos
+
+	//Team1(right) - leader
+	cAI* ai = new cAI();
+	ai->active = true;
+	ai->pos.Set(WayPoints[6].x, WayPoints[6].y, 1);
+	ai->scale.Set(1, 1, 1);
+	ai->mesh = meshList[GEO_BALL];
+	ai->init();
+	m_goList.push_back(ai);
+
+	//Team1(right) - medic
+	cAI* ai2 = new cAI();
+	ai2->active = true;
+	ai2->pos.Set(WayPoints[1].x, WayPoints[1].y, 1);
+	ai2->scale.Set(1, 1, 1);
+	ai2->mesh = meshList[GEO_BALL2];
+	ai2->init();
+	m_goList.push_back(ai2);
+
+	//Team1(right) - soldier
+	cAI* ai3 = new cAI();
+	ai3->active = true;
+	ai3->pos.Set(WayPoints[0].x, WayPoints[0].y, 1);
+	ai3->scale.Set(1, 1, 1);
+	ai3->mesh = meshList[GEO_BALL3];
+	ai3->init();
+	m_goList.push_back(ai3);
+
+	//Team2(left) - leader
+	cAI* ai4 = new cAI();
+	ai4->active = true;
+	ai4->pos.Set(WayPoints[7].x, WayPoints[7].y, 1);
+	ai4->scale.Set(1, 1, 1);
+	ai4->mesh = meshList[GEO_BALL];
+	ai4->init();
+	m_goList.push_back(ai4);
+
+	//Team2(left) - medic
+	cAI* ai5 = new cAI();
+	ai5->active = true;
+	ai5->pos.Set(WayPoints[4].x, WayPoints[4].y, 1);
+	ai5->scale.Set(1, 1, 1);
+	ai5->mesh = meshList[GEO_BALL2];
+	ai5->init();
+	m_goList.push_back(ai5);
+
+	//Team2(left) - soldier
+	cAI* ai6 = new cAI();
+	ai6->active = true;
+	ai6->pos.Set(WayPoints[3].x, WayPoints[3].y, 1);
+	ai6->scale.Set(1, 1, 1);
+	ai6->mesh = meshList[GEO_BALL3];
+	ai6->init();
+	m_goList.push_back(ai6);
 
 	state = 1;
 	state2 = 1;
@@ -139,8 +195,7 @@ void AIMain::RenderGO()
 		if (m_goList[i]->active == true)
 		{
 			modelStack.PushMatrix();
-			modelStack.Translate(m_goList[i]->pos.x + 50, m_goList[i]->pos.y + 50, m_goList[i]->pos.z);
-			modelStack.Scale(m_goList[i]->scale.x * 2, m_goList[i]->scale.y * 2, m_goList[i]->scale.z);
+			modelStack.Translate(m_goList[i]->pos.x, m_goList[i]->pos.y, m_goList[i]->pos.z);
 			RenderMesh(m_goList[i]->mesh, false);
 			modelStack.PopMatrix();
 		}
@@ -282,7 +337,7 @@ void AIMain::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], "AI: Red	| AI2: Purple", Color(1, 0, 0), 5, 40, 0);
 	modelStack.PopMatrix();
 
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < 8; i++)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(WayPoints[i].x, WayPoints[i].y, WayPoints[i].z);

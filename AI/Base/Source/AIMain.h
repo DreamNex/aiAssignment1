@@ -35,7 +35,7 @@ public:
 	virtual void Render();
 	virtual void Exit();
 
-	Vector3 WayPoints[6];
+	Vector3 WayPoints[8];
 
 	void RenderGO();
 	void RenderObjects();
