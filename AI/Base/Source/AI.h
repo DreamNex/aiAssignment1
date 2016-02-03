@@ -13,6 +13,7 @@ namespace MyAI
 		DODGE,
 		SWAP,
 		AGGRESIVE,
+		AGGRESIVE2,
 		ASSIST,
 		STOP1,
 		

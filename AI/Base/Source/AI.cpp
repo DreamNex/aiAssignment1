@@ -151,6 +151,10 @@ void cAI::update(double dt)
 				direction = fightingPoint - pos;
 				vel = direction.Normalize() * AiSpeed * dt;
 				pos += vel;
+				if (pos == fightingPoint)
+				{
+					arrived = true;
+				}
 			}
 			else
 			{
