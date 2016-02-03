@@ -43,14 +43,22 @@ const float AiSpeed = 10.f;
 void cAI::init()
 {
 	srand(time(NULL));
-	wayPoints.push_back(Vector3(-offset, -offset, 1));
+	wayPoints.push_back(Vector3(offset, offset, 1));
+	wayPoints.push_back(Vector3(-offset, offset, 1));
+	wayPoints.push_back(Vector3(offset * 5, offset, 1));
+	wayPoints.push_back(Vector3(offset * 5, 0, 1));
+	wayPoints.push_back(Vector3(offset * 5, -offset, 1));
+	wayPoints.push_back(Vector3(-offset * 5, offset, 1));
+	wayPoints.push_back(Vector3(-offset * 5, 0, 1));
+	wayPoints.push_back(Vector3(-offset * 5, -offset, 1));
+	/*wayPoints.push_back(Vector3(-offset, -offset, 1));
 	wayPoints.push_back(Vector3(-offset, offset, 1));
 	wayPoints.push_back(Vector3(5, 5, 1));
 	wayPoints.push_back(Vector3(offset, -offset, 1));
 	wayPoints.push_back(Vector3(-offset * 5, -offset * 5, 1));
 	wayPoints.push_back(Vector3(-offset * 5, offset * 3, 1));
 	wayPoints.push_back(Vector3(offset * 3, offset * 3, 1));
-	wayPoints.push_back(Vector3(offset * 3, -offset * 3, 1));
+	wayPoints.push_back(Vector3(offset * 3, -offset * 3, 1));*/
 	//pos.Set(wayPoints[0].x, wayPoints[0].y);
 	int randomIndex = RandomInteger(1, 3);
 	FSM2 = STOP2;
