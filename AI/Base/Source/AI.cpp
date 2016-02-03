@@ -216,10 +216,10 @@ void cAI::update(double dt)
 			{
 				// Move soldier to leader pos
 			}
-		}
-		else
-		{
-			FSM1 = SWAP;
+			else
+			{
+				FSM1 = SWAP;
+			}
 		}
 		break;
 	}
