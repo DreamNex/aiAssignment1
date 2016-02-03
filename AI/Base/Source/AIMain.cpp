@@ -54,6 +54,11 @@ void AIMain::Init()
 	ai->pos.Set(WayPoints[6].x, WayPoints[6].y, 1);
 	ai->scale.Set(1, 1, 1);
 	ai->mesh = meshList[GEO_BALL];
+	ai->SetFightPt(WayPoints[2]);
+	ai->startwPoint = WayPoints[6];
+	ai->mbController.SetMessage(ai->mbController.GetCommand(3));
+	ai->FSM1 = AGGRESIVE;
+	ai->FSM2 = STOP2;
 	ai->init();
 	m_goList.push_back(ai);
 
@@ -61,6 +66,8 @@ void AIMain::Init()
 	cAI* ai2 = new cAI();
 	ai2->active = true;
 	ai2->pos.Set(WayPoints[1].x, WayPoints[1].y, 1);
+	ai2->startwPoint = (WayPoints[1]);
+	ai2->SetFightPt(WayPoints[2]);
 	ai2->scale.Set(1, 1, 1);
 	ai2->mesh = meshList[GEO_BALL2];
 	ai2->init();
@@ -71,6 +78,8 @@ void AIMain::Init()
 	ai3->active = true;
 	ai3->pos.Set(WayPoints[0].x, WayPoints[0].y, 1);
 	ai3->scale.Set(1, 1, 1);
+	ai3->startwPoint = WayPoints[0];
+	ai3->SetFightPt(WayPoints[2]);
 	ai3->mesh = meshList[GEO_BALL3];
 	ai3->init();
 	m_goList.push_back(ai3);
@@ -79,6 +88,9 @@ void AIMain::Init()
 	cAI* ai4 = new cAI();
 	ai4->active = true;
 	ai4->pos.Set(WayPoints[7].x, WayPoints[7].y, 1);
+	ai4->Volunteer = true;
+	ai4->startwPoint = WayPoints[7];
+	ai4->SetFightPt(WayPoints[5]);
 	ai4->scale.Set(1, 1, 1);
 	ai4->mesh = meshList[GEO_BALL];
 	ai4->init();
@@ -88,6 +100,8 @@ void AIMain::Init()
 	cAI* ai5 = new cAI();
 	ai5->active = true;
 	ai5->pos.Set(WayPoints[4].x, WayPoints[4].y, 1);
+	ai5->SetFightPt(WayPoints[5]);
+	ai5->startwPoint = WayPoints[4];
 	ai5->scale.Set(1, 1, 1);
 	ai5->mesh = meshList[GEO_BALL2];
 	ai5->init();
@@ -97,6 +111,8 @@ void AIMain::Init()
 	cAI* ai6 = new cAI();
 	ai6->active = true;
 	ai6->pos.Set(WayPoints[3].x, WayPoints[3].y, 1);
+	ai6->startwPoint = WayPoints[3];
+	ai6->SetFightPt(WayPoints[6]);
 	ai6->scale.Set(1, 1, 1);
 	ai6->mesh = meshList[GEO_BALL3];
 	ai6->init();
@@ -118,9 +134,7 @@ void AIMain::Update(double dt)
 			ai->update(dt);
 		}
 
-		/*switch (ai->getState())
-		{
-		}*/
+		
 	}
 
 	respawntime--;
@@ -279,7 +293,7 @@ void AIMain::Render()
 
 	RenderObjects();
 	
-	switch (state)
+	/*switch (state)
 	{
 	case 1:
 		modelStack.PushMatrix();
@@ -331,10 +345,10 @@ void AIMain::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], "AI2: Dodge", Color(1, 0, 0), 5, 100, 90);
 		modelStack.PopMatrix();
 		break;
-	}
+	}*/
 
 	modelStack.PushMatrix();
-	RenderTextOnScreen(meshList[GEO_TEXT], "AI: Red	| AI2: Purple", Color(1, 0, 0), 5, 40, 0);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Blue:Leader| Purple:Soldier | Green:Medic", Color(1, 0, 0), 5, 25, 0);
 	modelStack.PopMatrix();
 
 	for (int i = 0; i < 8; i++)

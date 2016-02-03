@@ -48,9 +48,21 @@ std::string MessageBoard::GetFromMessage()
 }
 
 //Set the string that says who sent the message
-void MessageBoard::SetFromMessage(std::string From)
+void MessageBoard::SetFromMessage(int id)
 {
-	this->From = From;
+	if (id == 3)
+	{
+		From = "Medic";
+	}
+	else if (id == 2)
+	{
+		From = "Soldier";
+	}
+
+	else if (id == 1)
+	{
+		From = "Leader";
+	}
 }
 
 //Get the string that says who recieve the message
@@ -60,9 +72,21 @@ std::string MessageBoard::GetToMessage()
 }
 
 //Set the string that says who recieve the message
-void MessageBoard::SetToMessage(std::string To)
+void MessageBoard::SetToMessage(int id)
 {
-	this->To = To;
+	if (id == 3)
+	{
+		To = "Medic";
+	}
+	else if (id == 2)
+	{
+		To = "Soldier";
+	}
+
+	else if (id == 1)
+	{
+		To = "Leader";
+	}
 }
 
 //To reset the messageboard if there is message to be sent across the AI

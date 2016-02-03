@@ -13,7 +13,7 @@ namespace MyAI
 		DODGE,
 		SWAP,
 		AGGRESIVE,
-		AGGRESIVE2,
+		RETREAT,
 		ASSIST,
 		STOP1,
 		
@@ -23,6 +23,7 @@ namespace MyAI
 	{
 		SWAP2,
 		VOLUNTEER,
+		RETREAT2,
 		HEAL, // Only for AIs that are medics
 		STOP2,
 		
@@ -54,6 +55,9 @@ namespace MyAI
 		MessageBoard mbController;
 		std::string Sender;
 		std::string Reciever;
+		Vector3 startwPoint;
+		bool Volunteer;
+		int health;
 	
 	private:
 		//Waypoints and states
@@ -61,9 +65,10 @@ namespace MyAI
 		unsigned int wayPointIndex;
 		int randNum;
 		bool arrived;
+		bool arrived2;
 		bool isFighting;
 		bool SwapAI;
-		bool Volunteer;
+		
 		bool missed;
 		float offset;
 		int startPoint;
@@ -78,6 +83,8 @@ namespace MyAI
 		Vector3 vel;
 		Vector3 nextPoint;
 		Vector3 fightingPoint;
+		 // where ur starting pos is
+
 		
 
 		//const double rangeofFOV = 100;

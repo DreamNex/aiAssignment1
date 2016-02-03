@@ -10,10 +10,10 @@ public:
 	void SetMessage(std::string message);
 
 	std::string GetFromMessage();
-	void SetFromMessage(std::string From);
+	void SetFromMessage(int id);
 
 	std::string GetToMessage();
-	void SetToMessage(std::string From);
+	void SetToMessage(int id);
 
 	std::string GetCommand(int index);
 
