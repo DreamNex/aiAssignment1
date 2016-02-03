@@ -35,6 +35,8 @@ public:
 	virtual void Render();
 	virtual void Exit();
 
+	Vector3 WayPoints[6];
+
 	void RenderGO();
 	void RenderObjects();
 	GameObject* FetchGO();

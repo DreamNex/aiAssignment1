@@ -28,8 +28,6 @@ cAI::cAI()
 	, timer(0)
 	, teamID(0)
 	, startPoint(0)
-	
-
 {
 }
 
@@ -43,23 +41,7 @@ const float AiSpeed = 10.f;
 void cAI::init()
 {
 	srand(time(NULL));
-	wayPoints.push_back(Vector3(offset, offset, 1));
-	wayPoints.push_back(Vector3(-offset, offset, 1));
-	wayPoints.push_back(Vector3(offset * 5, offset, 1));
-	wayPoints.push_back(Vector3(offset * 5, 0, 1));
-	wayPoints.push_back(Vector3(offset * 5, -offset, 1));
-	wayPoints.push_back(Vector3(-offset * 5, offset, 1));
-	wayPoints.push_back(Vector3(-offset * 5, 0, 1));
-	wayPoints.push_back(Vector3(-offset * 5, -offset, 1));
-	/*wayPoints.push_back(Vector3(-offset, -offset, 1));
-	wayPoints.push_back(Vector3(-offset, offset, 1));
-	wayPoints.push_back(Vector3(5, 5, 1));
-	wayPoints.push_back(Vector3(offset, -offset, 1));
-	wayPoints.push_back(Vector3(-offset * 5, -offset * 5, 1));
-	wayPoints.push_back(Vector3(-offset * 5, offset * 3, 1));
-	wayPoints.push_back(Vector3(offset * 3, offset * 3, 1));
-	wayPoints.push_back(Vector3(offset * 3, -offset * 3, 1));*/
-	//pos.Set(wayPoints[0].x, wayPoints[0].y);
+
 	int randomIndex = RandomInteger(1, 3);
 	FSM2 = STOP2;
 	FSM1 = STOP1;
@@ -114,7 +96,7 @@ void cAI::update(double dt)
 		
 	case VOLUNTEER:
 	{
-					  if (mbController.GetSenderID == teamID)
+					  if (mbController.GetSenderID() == teamID)
 					  {
 
 						  if (mbController.Getmessage() == mbController.GetCommand(1));
@@ -134,7 +116,7 @@ void cAI::update(double dt)
 
 	case HEAL:
 	{
-				 if (mbController.GetSenderID == teamID)
+				 if (mbController.GetSenderID() == teamID)
 				 {
 					 if (mbController.Getmessage() == mbController.GetCommand(3))
 					 {
@@ -150,40 +132,37 @@ void cAI::update(double dt)
 	{
 	case ATTACK:
 	{
+		if ((target->pos - pos).Length() <= 12)
+		{
+			vel.SetZero();
 
-				   
+		}
+		else
+		{
+			Vector3 direction = (target->pos - pos);
+			vel = (direction.Normalize() * AiSpeed * dt);
+			pos = pos + (vel);
+		}
 
-				   if ((target->pos - pos).Length() <= 12)
-				   {
-					   vel.SetZero();
-					   
-				   }
-				   else
-				   {
-					   Vector3 direction = (target->pos - pos);
-					   vel = (direction.Normalize() * AiSpeed * dt);
-					   pos = pos + (vel);
-				   }
+		randNum = RandomInteger(1, 100);
+		if (randNum <= probabilityDodge)
+		{
+			FSM1 = DODGE;
+		}
+		else
+		{
+			target->health--;
+			//Translate it backwards abit to show that it got hit
+			//target->pos.x-= 0.1f;
+			// target->pos.y-= 0.1f;
 
-				   randNum = RandomInteger(1, 100);
-				   if (randNum <= probabilityDodge)
-				   {
-					   FSM1 = DODGE;
-				   }
-				   else
-				   {
-					   target->health--;
-					   //Translate it backwards abit to show that it got hit
-					   //target->pos.x-= 0.1f;
-					  // target->pos.y-= 0.1f;
-					   
-				   }
-				   break;
+		}
+		break;
 	}
 	case DODGE:
 	{
-				  FSM1 = ATTACK;
-				  break;
+		FSM1 = ATTACK;
+		break;
 	}
 	case SWAP:
 	{

@@ -52,6 +52,8 @@ namespace MyAI
 		MessageBoard mbController;
 		std::string Sender;
 		std::string Reciever;
+
+		Vector3 leaderPos, soldierPos, medicPos;
 	
 	private:
 		//Waypoints and states

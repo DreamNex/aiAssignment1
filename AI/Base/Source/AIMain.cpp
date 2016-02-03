@@ -39,7 +39,12 @@ void AIMain::Init()
 
 	srand((unsigned)time(NULL));
 	
-	
+	WayPoints[0].Set(25, 20, 1);
+	WayPoints[1].Set(25, 70, 0);
+	WayPoints[2].Set(55, 45, 0);
+	WayPoints[3].Set(110, 20, 0);
+	WayPoints[4].Set(110, 70, 0);
+	WayPoints[5].Set(80, 45, 0);
 
 	state = 1;
 	state2 = 1;
@@ -276,6 +281,15 @@ void AIMain::Render()
 	modelStack.PushMatrix();
 	RenderTextOnScreen(meshList[GEO_TEXT], "AI: Red	| AI2: Purple", Color(1, 0, 0), 5, 40, 0);
 	modelStack.PopMatrix();
+
+	for (int i = 0; i < 6; i++)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(WayPoints[i].x, WayPoints[i].y, WayPoints[i].z);
+		modelStack.Scale(3, 3, 1);
+		RenderMesh(meshList[GEO_WAYPOINTS], false);
+		modelStack.PopMatrix();
+	}
 }
 
 void AIMain::Exit()
