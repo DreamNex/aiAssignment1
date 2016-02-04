@@ -3,10 +3,9 @@
 
 MessageBoard::MessageBoard()
 {
-	Commands[0] = "Swap";
-	Commands[1] = "Assit Me!";
-	Commands[2] = "Medic!";
-	Commands[3] = "Moving Up";
+	message = "";
+	receiverAI = "";
+	senderAI = "";
 }
 
 
@@ -14,85 +13,40 @@ MessageBoard::~MessageBoard()
 {
 }
 
-int MessageBoard::GetSenderID()
-{
-	return senderid;
-}
-
-void MessageBoard::SetSenderID(unsigned int senderid)
-{
-	this->senderid = senderid;
-}
-
-std::string MessageBoard::GetCommand(int index)
-{
-	return Commands[index];
-}
-
-//Get the message that is meant to sent from AI to AI
-std::string MessageBoard::Getmessage()
-{
-	return message;
-}
-
-//Set the message that is meant to send from ai to ai
-void MessageBoard::SetMessage(std::string message)
+void MessageBoard::SetMsg(std::string message)
 {
 	this->message = message;
 }
 
-//Get the string that says who sent the message
-std::string MessageBoard::GetFromMessage()
+std::string MessageBoard::GetMsg()
 {
-	return From;
+	return message;
 }
 
-//Set the string that says who sent the message
-void MessageBoard::SetFromMessage(int id)
+void MessageBoard::SetSender(std::string senderAI)
 {
-	if (id == 3)
-	{
-		From = "Medic";
-	}
-	else if (id == 2)
-	{
-		From = "Soldier";
-	}
-
-	else if (id == 1)
-	{
-		From = "Leader";
-	}
+	this->senderAI = senderAI;
 }
 
-//Get the string that says who recieve the message
-std::string MessageBoard::GetToMessage()
+std::string MessageBoard::GetSender()
 {
-	return To;
+	return senderAI;
 }
 
-//Set the string that says who recieve the message
-void MessageBoard::SetToMessage(int id)
+void MessageBoard::SetReceiver(std::string receiverAI)
 {
-	if (id == 3)
-	{
-		To = "Medic";
-	}
-	else if (id == 2)
-	{
-		To = "Soldier";
-	}
+	this->receiverAI = receiverAI;
+}
 
-	else if (id == 1)
-	{
-		To = "Leader";
-	}
+std::string MessageBoard::GetReceiver()
+{
+	return receiverAI;
 }
 
 //To reset the messageboard if there is message to be sent across the AI
 void MessageBoard::ResetMessageBoard()
 {
-	message	  =   "Nil";
-	To        =	  "Nil";
-	From      =   "Nil";
+	message	= "Nil";
+	receiverAI = "Nil";
+	senderAI = "Nil";
 }

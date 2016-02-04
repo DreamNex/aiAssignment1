@@ -7,17 +7,21 @@
 #include <vector>
 
 using namespace irrklang;
-using namespace MyAI;
 
 
-AIMain::AIMain()
+AIMain::AIMain():
+mb(NULL)
 {
 	
 }
 
 AIMain::~AIMain()
 {
-
+	if (mb)
+	{
+		delete mb;
+		mb = NULL;
+	}
 }
 
 void AIMain::Init()
@@ -48,71 +52,68 @@ void AIMain::Init()
 	WayPoints[6].Set(25, 45, 0);	// leader1 pos
 	WayPoints[7].Set(110, 45, 0);	// leader2 pos
 
-	//Team1(right) - leader
+	mb = new MessageBoard;
+
+	// Leader - left
 	cAI* ai = new cAI();
 	ai->active = true;
 	ai->pos.Set(WayPoints[6].x, WayPoints[6].y, 1);
+	ai->startwPoint = (WayPoints[1]);
+	ai->SetFightPt(WayPoints[2]);
 	ai->scale.Set(1, 1, 1);
 	ai->mesh = meshList[GEO_BALL];
-	ai->SetFightPt(WayPoints[2]);
-	ai->startwPoint = WayPoints[6];
-	ai->mbController.SetMessage(ai->mbController.GetCommand(3));
-	ai->FSM1 = AGGRESIVE;
-	ai->FSM2 = STOP2;
+	ai->id = 1;
 	ai->init();
 	m_goList.push_back(ai);
 
-	//Team1(right) - medic
+	// Medic - left
 	cAI* ai2 = new cAI();
 	ai2->active = true;
 	ai2->pos.Set(WayPoints[1].x, WayPoints[1].y, 1);
-	ai2->startwPoint = (WayPoints[1]);
-	ai2->SetFightPt(WayPoints[2]);
 	ai2->scale.Set(1, 1, 1);
 	ai2->mesh = meshList[GEO_BALL2];
+	ai->id = 3;
 	ai2->init();
 	m_goList.push_back(ai2);
 
-	//Team1(right) - soldier
+	// Soldier - left
 	cAI* ai3 = new cAI();
 	ai3->active = true;
 	ai3->pos.Set(WayPoints[0].x, WayPoints[0].y, 1);
-	ai3->scale.Set(1, 1, 1);
-	ai3->startwPoint = WayPoints[0];
+	ai3->startwPoint = (WayPoints[0]);
 	ai3->SetFightPt(WayPoints[2]);
+	ai3->scale.Set(1, 1, 1);
 	ai3->mesh = meshList[GEO_BALL3];
+	ai->id = 2;
 	ai3->init();
 	m_goList.push_back(ai3);
 
-	//Team2(left) - leader
+	// Leader2 - right
 	cAI* ai4 = new cAI();
 	ai4->active = true;
 	ai4->pos.Set(WayPoints[7].x, WayPoints[7].y, 1);
-	ai4->Volunteer = true;
-	ai4->startwPoint = WayPoints[7];
+	ai4->startwPoint = (WayPoints[7]);
 	ai4->SetFightPt(WayPoints[5]);
 	ai4->scale.Set(1, 1, 1);
 	ai4->mesh = meshList[GEO_BALL];
 	ai4->init();
 	m_goList.push_back(ai4);
 
-	//Team2(left) - medic
+	// Medic2 - right
 	cAI* ai5 = new cAI();
 	ai5->active = true;
 	ai5->pos.Set(WayPoints[4].x, WayPoints[4].y, 1);
-	ai5->SetFightPt(WayPoints[5]);
-	ai5->startwPoint = WayPoints[4];
 	ai5->scale.Set(1, 1, 1);
 	ai5->mesh = meshList[GEO_BALL2];
 	ai5->init();
 	m_goList.push_back(ai5);
 
-	//Team2(left) - soldier
+	// Soldier2 - right
 	cAI* ai6 = new cAI();
 	ai6->active = true;
 	ai6->pos.Set(WayPoints[3].x, WayPoints[3].y, 1);
-	ai6->startwPoint = WayPoints[3];
-	ai6->SetFightPt(WayPoints[6]);
+	ai6->startwPoint = (WayPoints[3]);
+	ai6->SetFightPt(WayPoints[5]);
 	ai6->scale.Set(1, 1, 1);
 	ai6->mesh = meshList[GEO_BALL3];
 	ai6->init();
@@ -134,7 +135,6 @@ void AIMain::Update(double dt)
 			ai->update(dt);
 		}
 
-		
 	}
 
 	respawntime--;
@@ -348,7 +348,23 @@ void AIMain::Render()
 	}*/
 
 	modelStack.PushMatrix();
-	RenderTextOnScreen(meshList[GEO_TEXT], "Blue:Leader| Purple:Soldier | Green:Medic", Color(1, 0, 0), 5, 25, 0);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Blue:Leader | Purple:Medic | Green:Soldier", Color(1, 0, 0), 5, 25, 0);
+	modelStack.PopMatrix();
+
+	////leader state
+	//modelStack.PushMatrix();
+	//RenderTextOnScreen(meshList[GEO_TEXT], "Blue(Left) | State: ", Color(1, 0, 0), 5, 25, 0);
+	//modelStack.PopMatrix();
+
+	////leader2 state
+	//modelStack.PushMatrix();
+	//RenderTextOnScreen(meshList[GEO_TEXT], "Blue(Right) | State: ", Color(1, 0, 0), 105, 25, 0);
+	//modelStack.PopMatrix();
+
+	// Message Board
+	modelStack.PushMatrix();
+	RenderTextOnScreen(meshList[GEO_TEXT], "Message Board | From : " + mb->GetSender() +  " To: " + mb->GetReceiver(), Color(1, 0, 0), 5, 0, 90);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Message: " + mb->GetMsg(), Color(1, 0, 0), 5, 0, 85);
 	modelStack.PopMatrix();
 
 	for (int i = 0; i < 8; i++)

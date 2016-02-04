@@ -65,6 +65,7 @@ private:
 	int state;
 	int state2;
 	int respawntime;
+	MessageBoard* mb;
 
 	//For Sound (do only if have time)
 	irrklang::ISoundEngine* soundEngine;

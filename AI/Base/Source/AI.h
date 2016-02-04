@@ -6,92 +6,73 @@
 #include "SP3DLC.h"
 #include "MessageBoard.h"
 
-namespace MyAI
+
+	
+class cAI : public GameObject
 {
 	enum FSM_ONE
 	{
-		DODGE,
-		SWAP,
-		AGGRESIVE,
-		RETREAT,
-		ASSIST,
-		STOP1,
-		
+		STATE_ATTACK,
+		STATE_MOVE,
+		STATE_DODGE,
+		FSM1_NIL,
 	};
 
 	enum FSM_TWO
 	{
-		SWAP2,
-		VOLUNTEER,
-		RETREAT2,
-		HEAL, // Only for AIs that are medics
-		STOP2,
-		
+		STATE_HEAL,
+		STATE_SWAPOUT,
+		STATE_SWAPIN,
+		FSM2_NIL,
 	};
-	class cAI : public GameObject
-	{
-	public:
-		cAI();
-		virtual ~cAI();
 
-		void init();
-		void update(double dt);
+public:
+	cAI();
+	virtual ~cAI();
 
-		FSM_ONE getState2();
-		FSM_TWO getState();
+	void init();
+	void update(double dt);
 
-		void SetAITarget(cAI* target);
+	FSM_ONE getState2();
+	FSM_TWO getState();
 
-		unsigned int GetTeamID();
-		void SetTeamID(unsigned int teamID);
-		//void RenderState(Mesh* mesh, std::string text, Color color);
-		void SetFightPt(Vector3 fightingPoint);
-		Vector3 GetFightPt();
 
-		Vector3 getRandPos();
-		FSM_ONE FSM1;
-		FSM_TWO FSM2;
-
-		MessageBoard mbController;
-		std::string Sender;
-		std::string Reciever;
-		Vector3 startwPoint;
-		bool Volunteer;
-		int health;
+	unsigned int GetTeamID();
+	void SetTeamID(unsigned int teamID);
+	//void RenderState(Mesh* mesh, std::string text, Color color);
 	
-	private:
-		//Waypoints and states
+	void SetFightPt(Vector3 fightingPoint);
+	Vector3 GetFightPt();
 
-		unsigned int wayPointIndex;
-		int randNum;
-		bool arrived;
-		bool arrived2;
-		bool isFighting;
-		bool SwapAI;
-		
-		bool missed;
-		float offset;
-		int startPoint;
-		unsigned int ID;
-		unsigned int teamID;
+	
+	FSM_ONE FSM1;
+	FSM_TWO FSM2;
 
-		int timer;
-		cAI* target;
+	MessageBoard mbController;
+	std::string Sender;
+	std::string Reciever;
+	
+	Vector3 startwPoint;
+	bool Volunteer;
+	int health;
 
+	int id;
 
-		float probability;
-		Vector3 vel;
-		Vector3 nextPoint;
-		Vector3 fightingPoint;
-		 // where ur starting pos is
+private:
+	//Waypoints and states
 
-		
+	unsigned int wayPointIndex;
+	int randNum;
+	
+	Vector3 vel;
+	Vector3 nextPoint;
+	Vector3 fightingPoint;
+	// where ur starting pos is
 
-		//const double rangeofFOV = 100;
-		//const float playerRadius = 0.25;
-		//const float enemyRadius = 0.1f;
-		//const float proximity = 0.4f;
-		
-	};
-}
+	//const double rangeofFOV = 100;
+	//const float playerRadius = 0.25;
+	//const float enemyRadius = 0.1f;
+	//const float proximity = 0.4f;
+
+};
 #endif
