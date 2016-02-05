@@ -33,14 +33,18 @@ public:
 	
 	Mesh *mesh;
 	GAMEOBJECT_TYPE type;
+
 	Vector3 pos;
 	Vector3 targetPos;
 	Vector3 vel;
 	Vector3 scale;
 	Vector3 rotation;
+
 	bool active;
 	float mass;
 	float MAX_VEL;
+	int health;
+
 	GameObject* homing;
 	Vector3 normal;
 	
