@@ -22,8 +22,8 @@ cAI::cAI()
 	, Volunteer(false)
 	, health(50)
 	, id(0)
-{
 	
+{
 }
 
 cAI::~cAI()
@@ -136,16 +136,18 @@ void cAI::update(double dt)
 
 		case STATE_MOVE:
 		{
-				Vector3 direction = (1, 1, 1);
+				Vector3 direction;
 				direction = fightingPoint - pos;
-				vel = direction.Normalized() * AiSpeed *dt;
+				vel = direction * AiSpeed *dt;
 				pos += vel;
 				if (pos.x >= fightingPoint.x && pos.y >= fightingPoint.y && pos.z >= fightingPoint.z)
 				{
+					
 					//vel.SetZero();
 					FSM1 = STATE_ATTACK;
+					
 				}
-			break;
+				break;
 		}
 
 		case STATE_STANDBY:
@@ -178,9 +180,9 @@ void cAI::update(double dt)
 			{
 				if (id == 3)
 				{
-					Vector3 direction = (1, 1, 1);
+					Vector3 direction;
 					direction = startwPoint - pos;
-					vel = direction.Normalized() * AiSpeed *dt;
+					vel = direction * AiSpeed *dt;
 					pos += vel;
 					if (pos.x <= startwPoint.x && pos.y <= startwPoint.y && pos.z <= startwPoint.z)
 					{
@@ -213,7 +215,7 @@ void cAI::update(double dt)
 			{
 				Vector3 direction = (1, 1, 1);
 				direction = startwPoint - pos;
-				vel = direction.Normalized() * AiSpeed *dt;
+				vel = direction * AiSpeed *dt;
 				pos += vel;
 				if (pos.x <= startwPoint.x && pos.y <= startwPoint.y && pos.z <= startwPoint.z)
 				{
@@ -240,13 +242,12 @@ void cAI::update(double dt)
 			
 			//if (mbController.GetMsg() == "Swapping Out")
 			{
-				Vector3 direction = (1, 1, 1);
-				direction = fightingPoint - pos;
-				vel = direction.Normalized() * AiSpeed * dt;
+				Vector3 direction;
+				direction = fightingPoint - pos;	
+				vel = direction * AiSpeed * dt;
 				pos += vel;
 				if (pos.x >= fightingPoint.x && pos.y >= fightingPoint.y && pos.z >= fightingPoint.z)
 				{
-					//vel.SetZero();
 					if (id == 1)
 					{
 						mbController.SetLeaderM("Reached");
@@ -261,6 +262,7 @@ void cAI::update(double dt)
 					}
 				}
 			}
+
 			break;
 
 		case STATE_STANDBY2:
