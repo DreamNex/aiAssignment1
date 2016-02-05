@@ -57,8 +57,8 @@ void AIMain::Init()
 	// Leader - left
 	cAI* ai = new cAI();
 	ai->active = true;
-	ai->pos.Set(WayPoints[6].x, WayPoints[6].y, 1);
-	ai->startwPoint = (WayPoints[1]);
+	ai->pos.Set(WayPoints[6].x, WayPoints[6].y, WayPoints[6].z);
+	ai->startwPoint = (WayPoints[6]);
 	ai->SetFightPt(WayPoints[2]);
 	ai->scale.Set(1, 1, 1);
 	ai->mesh = meshList[GEO_BALL];
@@ -69,7 +69,7 @@ void AIMain::Init()
 	// Medic - left
 	cAI* ai2 = new cAI();
 	ai2->active = true;
-	ai2->pos.Set(WayPoints[1].x, WayPoints[1].y, 1);
+	ai2->pos.Set(WayPoints[1].x, WayPoints[1].y, WayPoints[1].z);
 	ai2->scale.Set(1, 1, 1);
 	ai2->mesh = meshList[GEO_BALL2];
 	ai2->id = 3;
@@ -79,7 +79,7 @@ void AIMain::Init()
 	// Soldier - left
 	cAI* ai3 = new cAI();
 	ai3->active = true;
-	ai3->pos.Set(WayPoints[0].x, WayPoints[0].y, 1);
+	ai3->pos.Set(WayPoints[0].x, WayPoints[0].y, WayPoints[0].z);
 	ai3->startwPoint = (WayPoints[0]);
 	ai3->SetFightPt(WayPoints[2]);
 	ai3->scale.Set(1, 1, 1);
@@ -91,7 +91,7 @@ void AIMain::Init()
 	// Leader2 - right
 	cAI* ai4 = new cAI();
 	ai4->active = true;
-	ai4->pos.Set(WayPoints[7].x, WayPoints[7].y, 1);
+	ai4->pos.Set(WayPoints[7].x, WayPoints[7].y, WayPoints[7].z);
 	ai4->startwPoint = (WayPoints[7]);
 	ai4->SetFightPt(WayPoints[5]);
 	ai4->scale.Set(1, 1, 1);
@@ -103,7 +103,7 @@ void AIMain::Init()
 	// Medic2 - right
 	cAI* ai5 = new cAI();
 	ai5->active = true;
-	ai5->pos.Set(WayPoints[4].x, WayPoints[4].y, 1);
+	ai5->pos.Set(WayPoints[4].x, WayPoints[4].y, WayPoints[4].z);
 	ai5->scale.Set(1, 1, 1);
 	ai5->mesh = meshList[GEO_BALL2];
 	ai5->id = 3;
@@ -113,7 +113,7 @@ void AIMain::Init()
 	// Soldier2 - right
 	cAI* ai6 = new cAI();
 	ai6->active = true;
-	ai6->pos.Set(WayPoints[3].x, WayPoints[3].y, 1);
+	ai6->pos.Set(WayPoints[3].x, WayPoints[3].y, WayPoints[3].y);
 	ai6->startwPoint = (WayPoints[3]);
 	ai6->SetFightPt(WayPoints[5]);
 	ai6->scale.Set(1, 1, 1);

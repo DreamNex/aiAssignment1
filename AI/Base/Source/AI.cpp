@@ -37,23 +37,6 @@ void cAI::init()
 {
 	srand(time(NULL));
 
-	if (id == 1)//leader
-	{
-		FSM1 = FSM1_NIL;
-		FSM2 = STATE_SWAPIN;
-
-	}
-	else if (id == 2)
-	{
-		FSM1 = FSM1_NIL;
-		FSM2 = FSM2_NIL;
-	}
-	else if (id == 3)
-	{
-		FSM1 = FSM1_NIL;
-		FSM2 = STATE_HEAL;
-	}
-
 }
 
 
@@ -89,22 +72,22 @@ void cAI::update(double dt)
 	{
 		case STATE_ATTACK:
 		{
-				pos = fightingPoint;
-				if (id == 1)
-				{
-					mbController.SetLeaderM("Attacking");
-					health--;
-				}
-				else if (id == 2)
-				{
-					mbController.SetSoldierM("Attacking");
-					health--;
-				}
-				else if (id == 3)
-				{
-					mbController.SetMedicM("Attacking");
-					health--;
-				}
+			pos = fightingPoint;
+			if (id == 1)
+			{
+				mbController.SetLeaderM("Attacking");
+				health--;
+			}
+			else if (id == 2)
+			{
+				mbController.SetSoldierM("Attacking");
+				health--;
+			}
+			else if (id == 3)
+			{
+				mbController.SetMedicM("Attacking");
+				health--;
+			}
 			
 			
 			if (rand() % 101 > 50)
@@ -153,13 +136,13 @@ void cAI::update(double dt)
 
 		case STATE_MOVE:
 		{
-				Vector3 direction;
+				Vector3 direction = (1, 1, 1);
 				direction = fightingPoint - pos;
-				vel = direction.Normalize() * AiSpeed *dt;
+				vel = direction.Normalized() * AiSpeed *dt;
 				pos += vel;
-				if (pos.x == fightingPoint.x && pos.y == fightingPoint.y && pos.z == fightingPoint.z)
+				if (pos.x >= fightingPoint.x && pos.y >= fightingPoint.y && pos.z >= fightingPoint.z)
 				{
-					vel.SetZero();
+					//vel.SetZero();
 					FSM1 = STATE_ATTACK;
 				}
 			break;
@@ -195,13 +178,13 @@ void cAI::update(double dt)
 			{
 				if (id == 3)
 				{
-					Vector3 direction;
+					Vector3 direction = (1, 1, 1);
 					direction = startwPoint - pos;
-					vel = direction.Normalize() * AiSpeed *dt;
+					vel = direction.Normalized() * AiSpeed *dt;
 					pos += vel;
-					if (pos.x == startwPoint.x && pos.y == startwPoint.y && pos.z == startwPoint.z)
+					if (pos.x <= startwPoint.x && pos.y <= startwPoint.y && pos.z <= startwPoint.z)
 					{
-						vel.SetZero();
+						//vel.SetZero();
 						health++;
 						if (health == 100)
 						{
@@ -228,13 +211,13 @@ void cAI::update(double dt)
 		{
 			//if (mbController.GetMsg() == "Swapping Out")
 			{
-				Vector3 direction;
+				Vector3 direction = (1, 1, 1);
 				direction = startwPoint - pos;
-				vel = direction.Normalize() * AiSpeed *dt;
+				vel = direction.Normalized() * AiSpeed *dt;
 				pos += vel;
-				if (pos.x == startwPoint.x && pos.y == startwPoint.y && pos.z == startwPoint.z)
+				if (pos.x <= startwPoint.x && pos.y <= startwPoint.y && pos.z <= startwPoint.z)
 				{
-					vel.SetZero();
+					//vel.SetZero();
 					if (id == 1)
 					{
 						mbController.SetLeaderM("Healing");
@@ -257,13 +240,13 @@ void cAI::update(double dt)
 			
 			//if (mbController.GetMsg() == "Swapping Out")
 			{
-				Vector3 direction;
+				Vector3 direction = (1, 1, 1);
 				direction = fightingPoint - pos;
-				vel = direction.Normalize() * AiSpeed *dt;
+				vel = direction.Normalized() * AiSpeed * dt;
 				pos += vel;
-				if (pos.x == fightingPoint.x && pos.y == fightingPoint.y && pos.z == fightingPoint.z)
+				if (pos.x >= fightingPoint.x && pos.y >= fightingPoint.y && pos.z >= fightingPoint.z)
 				{
-					vel.SetZero();
+					//vel.SetZero();
 					if (id == 1)
 					{
 						mbController.SetLeaderM("Reached");
@@ -287,12 +270,12 @@ void cAI::update(double dt)
 								   FSM2 = FSM2_NIL;
 							   }
 
-							   else if (id == 2)
+							   else if(id == 2)
 							   {
 								   FSM2 = FSM2_NIL;
 							   }
 
-							   else if (id == 3)
+							   else if(id == 3)
 							   {
 								   FSM2 = FSM2_NIL;
 							   }
