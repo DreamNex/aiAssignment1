@@ -15,11 +15,13 @@ class cAI : public GameObject
 		STATE_ATTACK,
 		STATE_MOVE,
 		STATE_DODGE,
+		STATE_STANDBY,
 		FSM1_NIL,
 	};
 
 	enum FSM_TWO
 	{
+		STATE_STANDBY2,
 		STATE_HEAL,
 		STATE_SWAPOUT,
 		STATE_SWAPIN,

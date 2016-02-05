@@ -54,7 +54,6 @@ void cAI::init()
 		FSM2 = STATE_HEAL;
 	}
 
-	int randomIndex = RandomInteger(1, 3);
 }
 
 
@@ -85,27 +84,62 @@ void cAI::update(double dt)
 	//===================================================STATES====================================================//
 	//=============================================================================================================//
 
+	cout << "FSM1: " << FSM1 << endl;
 	switch (FSM1)
 	{
 		case STATE_ATTACK:
 		{
-			if (pos == fightingPoint)
-			{
-				mbController.SetMsg("Attacking");
-				health--;
-			}
+				pos = fightingPoint;
+				if (id == 1)
+				{
+					mbController.SetLeaderM("Attacking");
+					health--;
+				}
+				else if (id == 2)
+				{
+					mbController.SetSoldierM("Attacking");
+					health--;
+				}
+				else if (id == 3)
+				{
+					mbController.SetMedicM("Attacking");
+					health--;
+				}
+			
 			
 			if (rand() % 101 > 50)
 			{
 				FSM1 = STATE_DODGE;
-				mbController.SetMsg("Dodge");
+				if (id == 1)
+				{
+					mbController.SetLeaderM("Dodge");
+				}
+				else if (id == 2)
+				{
+					mbController.SetSoldierM("Dodge");
+				}
+				else if (id == 3)
+				{
+					mbController.SetMedicM("Dodge");
+				}
 			}
 
 			if (health <= 10)
 			{
 				FSM1 = STATE_MOVE;
 				FSM2 = STATE_SWAPIN;
-				mbController.SetMsg("Swapping Out");
+				if (id == 1)
+				{
+					mbController.SetLeaderM("Swapping out");
+				}
+				else if (id == 2)
+				{
+					mbController.SetSoldierM("Swapping out");
+				}
+				else if (id == 3)
+				{
+					mbController.SetMedicM("Swapping out");
+				}
 			}
 
 			break;
@@ -119,8 +153,6 @@ void cAI::update(double dt)
 
 		case STATE_MOVE:
 		{
-			if (mbController.GetMsg() == "Reached")
-			{
 				Vector3 direction;
 				direction = fightingPoint - pos;
 				vel = direction.Normalize() * AiSpeed *dt;
@@ -130,16 +162,36 @@ void cAI::update(double dt)
 					vel.SetZero();
 					FSM1 = STATE_ATTACK;
 				}
-			}
 			break;
 		}
+
+		case STATE_STANDBY:
+		{
+							  if (id == 1)
+							  {
+								  FSM1 = STATE_MOVE;
+							  }
+
+							  else if (id == 2)
+							  {
+								  FSM1 = FSM1_NIL;
+							  }
+							  else if (id == 3)
+							  {
+								  FSM1 = FSM1_NIL;
+							  }
+							  break;
+		}
+		default:
+			FSM1 = STATE_STANDBY;		
+			break;
 	}
 
 	switch (FSM2)
 	{
 		case STATE_HEAL:
 		{
-			if (mbController.GetMsg() == "Healing");
+			//if (mbController.GetMsg() == "Healing");
 			{
 				if (id == 3)
 				{
@@ -153,7 +205,18 @@ void cAI::update(double dt)
 						health++;
 						if (health == 100)
 						{
-							mbController.SetMsg("Reached");
+							if (id == 1)
+							{
+								mbController.SetLeaderM("Reached");
+							}
+							else if (id == 2)
+							{
+								mbController.SetSoldierM("Reached");
+							}
+							else if (id == 3)
+							{
+								mbController.SetMedicM("Reached");
+							}
 						}
 					}
 				}
@@ -163,7 +226,7 @@ void cAI::update(double dt)
 
 		case STATE_SWAPOUT:
 		{
-			if (mbController.GetMsg() == "Swapping Out")
+			//if (mbController.GetMsg() == "Swapping Out")
 			{
 				Vector3 direction;
 				direction = startwPoint - pos;
@@ -172,7 +235,18 @@ void cAI::update(double dt)
 				if (pos.x == startwPoint.x && pos.y == startwPoint.y && pos.z == startwPoint.z)
 				{
 					vel.SetZero();
-					mbController.SetMsg("Healing");
+					if (id == 1)
+					{
+						mbController.SetLeaderM("Healing");
+					}
+					else if (id == 2)
+					{
+						mbController.SetSoldierM("Healing");
+					}
+					else if (id == 3)
+					{
+						mbController.SetMedicM("Healing");
+					}
 				}
 			}
 			break;
@@ -181,7 +255,7 @@ void cAI::update(double dt)
 		case STATE_SWAPIN:
 		{
 			
-			if (mbController.GetMsg() == "Swapping Out")
+			//if (mbController.GetMsg() == "Swapping Out")
 			{
 				Vector3 direction;
 				direction = fightingPoint - pos;
@@ -190,10 +264,43 @@ void cAI::update(double dt)
 				if (pos.x == fightingPoint.x && pos.y == fightingPoint.y && pos.z == fightingPoint.z)
 				{
 					vel.SetZero();
-					mbController.SetMsg("Reached");
+					if (id == 1)
+					{
+						mbController.SetLeaderM("Reached");
+					}
+					else if (id == 2)
+					{
+						mbController.SetSoldierM("Reached");
+					}
+					else if (id == 3)
+					{
+						mbController.SetMedicM("Reached");
+					}
 				}
 			}
 			break;
+
+		case STATE_STANDBY2:
+		{
+							   if (id == 1)
+							   {
+								   FSM2 = FSM2_NIL;
+							   }
+
+							   else if (id == 2)
+							   {
+								   FSM2 = FSM2_NIL;
+							   }
+
+							   else if (id == 3)
+							   {
+								   FSM2 = FSM2_NIL;
+							   }
 		}
+			break;
+		}
+		default:
+			STATE_STANDBY2;
+			break;
 	}
 }

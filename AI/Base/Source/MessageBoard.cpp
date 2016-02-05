@@ -6,6 +6,15 @@ MessageBoard::MessageBoard()
 	message = "";
 	receiverAI = "";
 	senderAI = "";
+
+	SenderLeader = "Leader ";
+	ReceiverLeader = "Leader ";
+
+	SenderMedic = "Medic ";
+	ReceiverMedic = "Medic ";
+
+	SenderSoldier = "Soldier ";
+	ReceiverSoldier = "Soldier ";
 }
 
 
@@ -38,11 +47,40 @@ void MessageBoard::SetReceiver(std::string receiverAI)
 	this->receiverAI = receiverAI;
 }
 
+//==============================================================================
 std::string MessageBoard::GetReceiver()
 {
 	return receiverAI;
 }
 
+std::string MessageBoard::GetLeaderMsg()
+{
+	return LeaderMSG;
+}
+
+std::string MessageBoard::GetMedicMsg()
+{
+	return MedicMSG;
+}
+
+std::string MessageBoard::GetSoldierMsg()
+{
+	return SoldierMSG;
+}
+//==================================================================================
+
+void MessageBoard::SetLeaderM(std::string LeaderMSG)
+{
+	this->LeaderMSG = LeaderMSG;
+}
+void MessageBoard::SetSoldierM(std::string SoldierMSG)
+{
+	this->SoldierMSG = SoldierMSG;
+}
+void MessageBoard::SetMedicM(std::string MedicMSG)
+{
+	this->MedicMSG = MedicMSG;
+}
 //To reset the messageboard if there is message to be sent across the AI
 void MessageBoard::ResetMessageBoard()
 {

@@ -72,7 +72,7 @@ void AIMain::Init()
 	ai2->pos.Set(WayPoints[1].x, WayPoints[1].y, 1);
 	ai2->scale.Set(1, 1, 1);
 	ai2->mesh = meshList[GEO_BALL2];
-	ai->id = 3;
+	ai2->id = 3;
 	ai2->init();
 	m_goList.push_back(ai2);
 
@@ -84,7 +84,7 @@ void AIMain::Init()
 	ai3->SetFightPt(WayPoints[2]);
 	ai3->scale.Set(1, 1, 1);
 	ai3->mesh = meshList[GEO_BALL3];
-	ai->id = 2;
+	ai3->id = 2;
 	ai3->init();
 	m_goList.push_back(ai3);
 
@@ -96,6 +96,7 @@ void AIMain::Init()
 	ai4->SetFightPt(WayPoints[5]);
 	ai4->scale.Set(1, 1, 1);
 	ai4->mesh = meshList[GEO_BALL];
+	ai4->id = 1;
 	ai4->init();
 	m_goList.push_back(ai4);
 
@@ -105,6 +106,7 @@ void AIMain::Init()
 	ai5->pos.Set(WayPoints[4].x, WayPoints[4].y, 1);
 	ai5->scale.Set(1, 1, 1);
 	ai5->mesh = meshList[GEO_BALL2];
+	ai5->id = 3;
 	ai5->init();
 	m_goList.push_back(ai5);
 
@@ -116,6 +118,7 @@ void AIMain::Init()
 	ai6->SetFightPt(WayPoints[5]);
 	ai6->scale.Set(1, 1, 1);
 	ai6->mesh = meshList[GEO_BALL3];
+	ai6->id = 2;
 	ai6->init();
 	m_goList.push_back(ai6);
 
@@ -213,6 +216,7 @@ void AIMain::RenderGO()
 			RenderMesh(m_goList[i]->mesh, false);
 			modelStack.PopMatrix();
 		}
+		
 	}
 }
 
@@ -292,60 +296,6 @@ void AIMain::Render()
 	modelStack.PopMatrix();
 
 	RenderObjects();
-	
-	/*switch (state)
-	{
-	case 1:
-		modelStack.PushMatrix();
-		RenderTextOnScreen(meshList[GEO_TEXT], "AI: Patrol", Color(1, 0, 0), 5, 3, 90);
-		modelStack.PopMatrix();
-		break;
-
-	case 2:
-		modelStack.PushMatrix();
-		RenderTextOnScreen(meshList[GEO_TEXT], "AI: Idle", Color(1, 0, 0), 5, 3, 90);
-		modelStack.PopMatrix();
-		break;
-
-	case 3:
-		modelStack.PushMatrix();
-		RenderTextOnScreen(meshList[GEO_TEXT], "AI: Attack", Color(1, 0, 0), 5, 3, 90);
-		modelStack.PopMatrix();
-		break;
-
-	case 4:
-		modelStack.PushMatrix();
-		RenderTextOnScreen(meshList[GEO_TEXT], "AI: Dodge", Color(1, 0, 0), 5, 3, 90);
-		modelStack.PopMatrix();
-		break;
-	}
-
-	switch (state2)
-	{
-	case 1:
-		modelStack.PushMatrix();
-		RenderTextOnScreen(meshList[GEO_TEXT], "AI2: Patrol", Color(1, 0, 0), 5, 100, 90);
-		modelStack.PopMatrix();
-		break;
-
-	case 2:
-		modelStack.PushMatrix();
-		RenderTextOnScreen(meshList[GEO_TEXT], "AI2: Idle", Color(1, 0, 0), 5, 100, 90);
-		modelStack.PopMatrix();
-		break;
-
-	case 3:
-		modelStack.PushMatrix();
-		RenderTextOnScreen(meshList[GEO_TEXT], "AI2: Attack", Color(1, 0, 0), 5, 100, 90);
-		modelStack.PopMatrix();
-		break;
-
-	case 4:
-		modelStack.PushMatrix();
-		RenderTextOnScreen(meshList[GEO_TEXT], "AI2: Dodge", Color(1, 0, 0), 5, 100, 90);
-		modelStack.PopMatrix();
-		break;
-	}*/
 
 	modelStack.PushMatrix();
 	RenderTextOnScreen(meshList[GEO_TEXT], "Blue:Leader | Purple:Medic | Green:Soldier", Color(1, 0, 0), 5, 25, 0);
@@ -363,6 +313,7 @@ void AIMain::Render()
 
 	// Message Board
 	modelStack.PushMatrix();
+
 	RenderTextOnScreen(meshList[GEO_TEXT], "Message Board | From : " + mb->GetSender() +  " To: " + mb->GetReceiver(), Color(1, 0, 0), 5, 0, 90);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Message: " + mb->GetMsg(), Color(1, 0, 0), 5, 0, 85);
 	modelStack.PopMatrix();
