@@ -60,18 +60,18 @@ void cAI::UpdateLeaderFSM(double dt)
 		case STATE_LEADER_FIGHTING:
 		{
 
-									  //Move the player up
-									  if ((fightpoint - pos).Length >= 1.5f)
-									  {
-										  Vector3 direction;
-										  vel = direction.Normalized() * AiSpeed * dt;
-										  pos += vel;
-									  }
+			//Move the player up
+			if ((fightpoint - pos).Length >= 1.5f)
+			{
+				Vector3 direction;
+				vel = direction.Normalized() * AiSpeed * dt;
+				pos += vel;
+			}
 
-									  else
-									  {
-										  pos = fightpoint;
-									  }
+			else
+			{
+				pos = fightpoint;
+			}
 
 			break;
 		}
@@ -96,18 +96,16 @@ void cAI::UpdateSoldierFSM(double dt)
 	{
 		case STATE_SOLDIER_FIGHTING:
 		{
-			Vector3 direction;
-
-			if (pos != fightpoint)
+			if ((fightpoint - pos).Length >= 1.5f)
 			{
-				direction = fightpoint - pos;
-				vel = direction.Normalize() * AiSpeed * dt;
+				Vector3 direction;
+				vel = direction.Normalized() * AiSpeed * dt;
 				pos += vel;
 			}
-			else if (pos == fightpoint)
+
+			else
 			{
 				pos = fightpoint;
-				vel.SetZero();
 				health--;
 			}
 
@@ -121,16 +119,16 @@ void cAI::UpdateSoldierFSM(double dt)
 		{
 			Vector3 direction;
 
-			if (pos != startpoint)
+			if ((pos - startpoint).Length <= 1.5f)
 			{
-				direction = pos - startpoint;
-				vel = direction.Normalize() * AiSpeed * dt;
+				Vector3 direction;
+				vel = direction.Normalized() * AiSpeed * dt;
 				pos += vel;
 			}
-			else if (pos == startpoint)
+
+			else
 			{
 				pos = startpoint;
-				vel.SetZero();
 				SOLDIER_FSM = STATE_SOLDIER_STANDBY;
 			}
 			break;
