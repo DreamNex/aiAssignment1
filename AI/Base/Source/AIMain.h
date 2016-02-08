@@ -59,6 +59,7 @@ private:
 	
 	//Variables here
 	bool Perspec;
+	bool occupied;
 	float m_worldWidth;
 	float m_worldHeight;
 	float rotateAngle;

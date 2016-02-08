@@ -9,7 +9,7 @@ class cAI : public GameObject
 {
 	enum FSM_LEADER
 	{
-		STATE_LEADER_STANBY,    // Set as default in swtich case statement
+		STATE_LEADER_STANDBY,    // Set as default in swtich case statement
 		STATE_LEADER_FIGHTING,  // Fight other ai
 		STATE_LEADER_RETREAT,   // Go back to start point
 		STATE_LEADER_SWAPOUT,   // after someone retreats
@@ -49,13 +49,18 @@ public:
 	int getID();
 	void setID(int id);
 
+	int getState();
+	void setState(int state);
+
 	Vector3 getFinishP();
 	void setFinishP(Vector3 fightpoint);
+
 	Vector3 getStartP();
 	void setStartP(Vector3 startpoint);
 
 private:
 	int id;
+	int state;
 
 	Vector3 fightpoint;
 	Vector3 startpoint;

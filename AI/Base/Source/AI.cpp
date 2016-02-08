@@ -18,13 +18,17 @@ const float AiSpeed = 10.f;
 void cAI::init()
 {
 	srand(time(NULL));
-
 }
 
 //GET FUNCTIONS
 int cAI::getID()
 {
 	return id;
+}
+
+int cAI::getState()
+{
+	return state;
 }
 
 Vector3 cAI::getFinishP()
@@ -41,6 +45,30 @@ Vector3 cAI::getStartP()
 void cAI::setID(int id)
 {
 	this->id = id;
+}
+
+void cAI::setState(int state)
+{
+	if (state == 0)
+	{
+		SOLDIER_FSM = STATE_SOLDIER_STANDBY;
+		this->state = state;
+	}
+	else if (state == 1)
+	{
+		SOLDIER_FSM = STATE_SOLDIER_FIGHTING;
+		this->state = state;
+	}
+	else if (state == 2)
+	{
+		SOLDIER_FSM = STATE_SOLDIER_RETREAT;
+		this->state = state;
+	}
+	else if (state == 3)
+	{
+		SOLDIER_FSM = STATE_SOLDIER_SWAPOUT;
+		this->state = state;
+	}
 }
 
 void cAI::setFinishP(Vector3 fightpoint)
@@ -61,7 +89,7 @@ void cAI::UpdateLeaderFSM(double dt)
 		{
 
 			//Move the player up
-			if ((fightpoint - pos).Length >= 1.5f)
+			if ((fightpoint - pos).Length() >= 1.5f)
 			{
 				Vector3 direction;
 				vel = direction.Normalized() * AiSpeed * dt;
@@ -79,7 +107,7 @@ void cAI::UpdateLeaderFSM(double dt)
 		{
 			break;
 		}
-		case STATE_LEADER_STANBY:
+		case STATE_LEADER_STANDBY:
 		{
 			break;
 		}
@@ -96,34 +124,22 @@ void cAI::UpdateSoldierFSM(double dt)
 	{
 		case STATE_SOLDIER_FIGHTING:
 		{
-			float dist = (fightpoint - pos).Length;
-
-			if ((fightpoint - pos).Length >= dist)
-			{
-				Vector3 direction;
-				vel = direction.Normalized() * AiSpeed * dt;
-				pos += vel;
-			}
-
-			else
-			{
-				pos = fightpoint;
-				health--;
-			}
+			
+			health--;
 
 			if (health <= 2)
 			{
 				SOLDIER_FSM = STATE_SOLDIER_RETREAT;
+				break;
 			}
 			break;
 		}
 		case STATE_SOLDIER_RETREAT:
 		{
-			float dist = (pos - startpoint).Length;
 
-			if ((pos - startpoint).Length <= dist)
+			if ((startpoint - pos).Length() >= 1.5f)
 			{
-				Vector3 direction;
+				Vector3 direction = startpoint - pos;
 				vel = direction.Normalized() * AiSpeed * dt;
 				pos += vel;
 			}
@@ -133,15 +149,44 @@ void cAI::UpdateSoldierFSM(double dt)
 				pos = startpoint;
 				SOLDIER_FSM = STATE_SOLDIER_STANDBY;
 			}
+
 			break;
 		}
 		case STATE_SOLDIER_STANDBY:
 		{
+			if ((startpoint - pos).Length() >= 1.5f)
+			{
+				Vector3 direction = startpoint - pos;
+				vel = direction.Normalized() * AiSpeed * dt;
+				pos += vel;
+			}
+			else
+			{
+				pos = startpoint;
+			}
+
+
+			//health++;
+			/*if (health >= 100)
+			{
+				SOLDIER_FSM = STATE_SOLDIER_FIGHTING;
+			}*/
 			break;
 		}
 		case STATE_SOLDIER_SWAPOUT:
 		{
-			SOLDIER_FSM = STATE_SOLDIER_FIGHTING;
+			if ((fightpoint - pos).Length() >= 1.5f)
+			{
+				Vector3 direction = fightpoint - pos;
+				vel = direction.Normalized() * AiSpeed * dt;
+				pos += vel;
+			}
+
+			else
+			{
+				pos = fightpoint;
+				SOLDIER_FSM = STATE_SOLDIER_FIGHTING;
+			}
 			break;
 		}
 		default:
