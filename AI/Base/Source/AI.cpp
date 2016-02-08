@@ -59,6 +59,20 @@ void cAI::UpdateLeaderFSM(double dt)
 	{
 		case STATE_LEADER_FIGHTING:
 		{
+
+									  //Move the player up
+									  if ((fightpoint - pos).Length >= 1.5f)
+									  {
+										  Vector3 direction;
+										  vel = direction.Normalized() * AiSpeed * dt;
+										  pos += vel;
+									  }
+
+									  else
+									  {
+										  pos = fightpoint;
+									  }
+
 			break;
 		}
 		case STATE_LEADER_RETREAT:
