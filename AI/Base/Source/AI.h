@@ -51,11 +51,14 @@ public:
 
 	Vector3 getFinishP();
 	void setFinishP(Vector3 fightpoint);
+	Vector3 getStartP();
+	void setStartP(Vector3 startpoint);
 
 private:
 	int id;
 
 	Vector3 fightpoint;
+	Vector3 startpoint;
 
 
 };

@@ -49,8 +49,6 @@ void cAI::UpdateLeaderFSM(double dt)
 	{
 		case STATE_LEADER_FIGHTING:
 		{
-									  //Move the player up
-									  if (pos != )
 			break;
 		}
 		case STATE_LEADER_RETREAT:
@@ -72,26 +70,56 @@ void cAI::UpdateSoldierFSM(double dt)
 {
 	switch (SOLDIER_FSM)
 	{
-		switch (SOLDIER_FSM)
+		case STATE_SOLDIER_FIGHTING:
 		{
-			case STATE_SOLDIER_FIGHTING:
-			{
-				  break;
-			}
-			case STATE_SOLDIER_RETREAT:
-			{
-				 break;
-			}
-			case STATE_SOLDIER_STANDBY:
-			{
-				break;
-			}
-			case STATE_SOLDIER_SWAPOUT:
-			{
-				 break;
-			}
-		}
+			Vector3 direction;
 
+			if (pos != fightpoint)
+			{
+				direction = fightpoint - pos;
+				vel = direction.Normalize() * AiSpeed * dt;
+				pos += vel;
+			}
+			else if (pos == fightpoint)
+			{
+				pos = fightpoint;
+				vel.SetZero();
+				health--;
+			}
+
+			if (health <= 2)
+			{
+				SOLDIER_FSM = STATE_SOLDIER_RETREAT;
+			}
+			break;
+		}
+		case STATE_SOLDIER_RETREAT:
+		{
+			Vector3 direction;
+
+			if (pos != startpoint)
+			{
+				direction = pos - startpoint;
+				vel = direction.Normalize() * AiSpeed * dt;
+				pos += vel;
+			}
+			else if (pos == startpoint)
+			{
+				pos = startpoint;
+				vel.SetZero();
+				SOLDIER_FSM = STATE_SOLDIER_STANDBY;
+			}
+			break;
+		}
+		case STATE_SOLDIER_STANDBY:
+		{
+			break;
+		}
+		case STATE_SOLDIER_SWAPOUT:
+		{
+			SOLDIER_FSM = STATE_SOLDIER_FIGHTING;
+			break;
+		}
 	}
 }
 
