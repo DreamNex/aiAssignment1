@@ -32,6 +32,11 @@ Vector3 cAI::getFinishP()
 	return fightpoint;
 }
 
+Vector3 cAI::getStartP()
+{
+	return startpoint;
+}
+
 //SET FUNCTIONS
 void cAI::setID(int id)
 {
@@ -41,6 +46,11 @@ void cAI::setID(int id)
 void cAI::setFinishP(Vector3 fightpoint)
 {
 	this->fightpoint = fightpoint;
+}
+
+void cAI::setStartP(Vector3 startpoint)
+{
+	this->startpoint = startpoint;
 }
 
 void cAI::UpdateLeaderFSM(double dt)
