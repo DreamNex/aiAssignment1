@@ -144,6 +144,8 @@ void cAI::UpdateSoldierFSM(double dt)
 			SOLDIER_FSM = STATE_SOLDIER_FIGHTING;
 			break;
 		}
+		default:
+			break;
 	}
 }
 
