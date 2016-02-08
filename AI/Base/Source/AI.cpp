@@ -96,7 +96,9 @@ void cAI::UpdateSoldierFSM(double dt)
 	{
 		case STATE_SOLDIER_FIGHTING:
 		{
-			if ((fightpoint - pos).Length >= 1.5f)
+			float dist = (fightpoint - pos).Length;
+
+			if ((fightpoint - pos).Length >= dist)
 			{
 				Vector3 direction;
 				vel = direction.Normalized() * AiSpeed * dt;
@@ -117,9 +119,9 @@ void cAI::UpdateSoldierFSM(double dt)
 		}
 		case STATE_SOLDIER_RETREAT:
 		{
-			Vector3 direction;
+			float dist = (pos - startpoint).Length;
 
-			if ((pos - startpoint).Length <= 1.5f)
+			if ((pos - startpoint).Length <= dist)
 			{
 				Vector3 direction;
 				vel = direction.Normalized() * AiSpeed * dt;
