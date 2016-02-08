@@ -49,8 +49,13 @@ public:
 	int getID();
 	void setID(int id);
 
+	Vector3 getFinishP();
+	void setFinishP(Vector3 fightpoint);
+
 private:
 	int id;
+
+	Vector3 fightpoint;
 
 
 };

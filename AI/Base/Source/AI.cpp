@@ -21,12 +21,36 @@ void cAI::init()
 
 }
 
+//GET FUNCTIONS
+int cAI::getID()
+{
+	return id;
+}
+
+Vector3 cAI::getFinishP()
+{
+	return fightpoint;
+}
+
+//SET FUNCTIONS
+void cAI::setID(int id)
+{
+	this->id = id;
+}
+
+void cAI::setFinishP(Vector3 fightpoint)
+{
+	this->fightpoint = fightpoint;
+}
+
 void cAI::UpdateLeaderFSM(double dt)
 {
 	switch (LEADER_FSM)
 	{
 		case STATE_LEADER_FIGHTING:
 		{
+									  //Move the player up
+									  if (pos != )
 			break;
 		}
 		case STATE_LEADER_RETREAT:
@@ -48,12 +72,32 @@ void cAI::UpdateSoldierFSM(double dt)
 {
 	switch (SOLDIER_FSM)
 	{
+		switch (SOLDIER_FSM)
+		{
+			case STATE_SOLDIER_FIGHTING:
+			{
+				  break;
+			}
+			case STATE_SOLDIER_RETREAT:
+			{
+				 break;
+			}
+			case STATE_SOLDIER_STANDBY:
+			{
+				break;
+			}
+			case STATE_SOLDIER_SWAPOUT:
+			{
+				 break;
+			}
+		}
 
 	}
 }
 
 void cAI::UpdateMedicFSM(double dt)
 {
+	// Drop if no time.
 	switch (MEDIC_FSM)
 	{
 
