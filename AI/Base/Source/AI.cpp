@@ -26,9 +26,14 @@ int cAI::getID()
 	return id;
 }
 
-int cAI::getState()
+int cAI::getStateSoldier()
 {
-	return state;
+	return stateSoldier;
+}
+
+int cAI::getStateLeader()
+{
+	return stateLeader;
 }
 
 Vector3 cAI::getFinishP()
@@ -47,27 +52,51 @@ void cAI::setID(int id)
 	this->id = id;
 }
 
-void cAI::setState(int state)
+void cAI::setStateSoldier(int stateSoldier)
 {
-	if (state == 0)
+	if (stateSoldier == 0)
 	{
 		SOLDIER_FSM = STATE_SOLDIER_STANDBY;
-		this->state = state;
+		this->stateSoldier = stateSoldier;
 	}
-	else if (state == 1)
+	else if (stateSoldier == 1)
 	{
 		SOLDIER_FSM = STATE_SOLDIER_FIGHTING;
-		this->state = state;
+		this->stateSoldier = stateSoldier;
 	}
-	else if (state == 2)
+	else if (stateSoldier == 2)
 	{
 		SOLDIER_FSM = STATE_SOLDIER_RETREAT;
-		this->state = state;
+		this->stateSoldier = stateSoldier;
 	}
-	else if (state == 3)
+	else if (stateSoldier == 3)
 	{
 		SOLDIER_FSM = STATE_SOLDIER_SWAPOUT;
-		this->state = state;
+		this->stateSoldier = stateSoldier;
+	}
+}
+
+void cAI::setStateLeader(int stateLeader)
+{
+	if (stateLeader == 0)
+	{
+		LEADER_FSM = STATE_LEADER_STANDBY;
+		this->stateLeader = stateLeader;
+	}
+	else if (stateLeader == 1)
+	{
+		LEADER_FSM = STATE_LEADER_FIGHTING;
+		this->stateLeader = stateLeader;
+	}
+	else if (stateLeader == 2)
+	{
+		LEADER_FSM = STATE_LEADER_RETREAT;
+		this->stateLeader = stateLeader;
+	}
+	else if (stateLeader == 3)
+	{
+		LEADER_FSM = STATE_LEADER_SWAPOUT;
+		this->stateLeader = stateLeader;
 	}
 }
 

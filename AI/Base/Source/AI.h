@@ -49,8 +49,11 @@ public:
 	int getID();
 	void setID(int id);
 
-	int getState();
-	void setState(int state);
+	int getStateSoldier();
+	void setStateSoldier(int stateSoldier);
+
+	int getStateLeader();
+	void setStateLeader(int stateLeader);
 
 	Vector3 getFinishP();
 	void setFinishP(Vector3 fightpoint);
@@ -60,7 +63,8 @@ public:
 
 private:
 	int id;
-	int state;
+	int stateSoldier;
+	int stateLeader;
 
 	Vector3 fightpoint;
 	Vector3 startpoint;

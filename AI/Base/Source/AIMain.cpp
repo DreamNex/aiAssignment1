@@ -52,52 +52,55 @@ void AIMain::Init()
 	WayPoints[6].Set(25, 45, 0);	// leader1 pos
 	WayPoints[7].Set(110, 45, 0);	// leader2 pos
 
-
+	// Leader left
 	cAI* ai = new cAI();
 	ai->active = true;
 	ai->pos.Set(WayPoints[6].x, WayPoints[6].y, WayPoints[6].z);
 	ai->scale.Set(1, 1, 1);
 	ai->mesh = meshList[GEO_BALL];
-	ai->setID(2);
+	ai->setID(1);
 	ai->setFinishP(WayPoints[2]);
 	ai->setStartP(WayPoints[6]);
-	ai->setState(3);
+	ai->setStateLeader(3);
 	ai->init();
 	m_goList.push_back(ai);
 
+	// Leader right
 	cAI* ai2 = new cAI();
 	ai2->active = true;
 	ai2->pos.Set(WayPoints[7].x, WayPoints[7].y, WayPoints[7].z);
 	ai2->scale.Set(1, 1, 1);
 	ai2->mesh = meshList[GEO_BALL];
-	ai2->setID(2);
+	ai2->setID(1);
 	ai2->setFinishP(WayPoints[5]);
 	ai2->setStartP(WayPoints[7]);
-	ai2->setState(3);
+	ai2->setStateLeader(3);
 	ai2->init();
 	m_goList.push_back(ai2);
 
+	// Soldier left
 	cAI* ai3 = new cAI();
 	ai3->active = true;
 	ai3->pos.Set(WayPoints[0].x, WayPoints[0].y, WayPoints[0].z);
 	ai3->scale.Set(1, 1, 1);
-	ai3->mesh = meshList[GEO_BALL];
+	ai3->mesh = meshList[GEO_BALL3];
 	ai3->setID(2);
 	ai3->setFinishP(WayPoints[2]);
 	ai3->setStartP(WayPoints[0]);
-	ai3->setState(3);
+	ai3->setStateSoldier(3);
 	ai3->init();
 	m_goList.push_back(ai3);
 
+	// Soldier right
 	cAI* ai4 = new cAI();
 	ai4->active = true;
 	ai4->pos.Set(WayPoints[3].x, WayPoints[3].y, WayPoints[3].z);
 	ai4->scale.Set(1, 1, 1);
-	ai4->mesh = meshList[GEO_BALL];
+	ai4->mesh = meshList[GEO_BALL3];
 	ai4->setID(2);
 	ai4->setFinishP(WayPoints[5]);
 	ai4->setStartP(WayPoints[3]);
-	ai4->setState(3);
+	ai4->setStateSoldier(3);
 	ai4->init();
 	m_goList.push_back(ai4);
 
@@ -121,23 +124,54 @@ void AIMain::Update(double dt)
 			
 			else if (ai->pos != ai->getFinishP() && occupied == false && ai->health >= 2) // Check if one of the ai pos = to the fight point
 			{
-				ai->setState(3);
+				if (ai->getID() == 1)
+				{
+					ai->setStateLeader(3);
+				}
+				else if (ai->getID() == 2)
+				{
+					ai->setStateSoldier(3);
+				}
+				
 			}
 
 			else if (ai->pos == ai->getFinishP() && occupied == true && ai->health >= 2) // Check if one ai is already on the point
 			{
-				ai->setState(1); //set it to attack.
+				if (ai->getID() == 1)
+				{
+					ai->setStateLeader(1);
+				}
+				else if (ai->getID() == 2)
+				{
+					ai->setStateSoldier(1);
+				}
 			}
 
 			else if (ai->pos == ai->getFinishP() && occupied == true && ai->health <= 2)
 			{
-				ai->setState(2);
-				occupied = false;
+				if (ai->getID() == 1)
+				{
+					ai->setStateLeader(2);
+					occupied = false;
+				}
+				else if (ai->getID() == 2)
+				{
+					ai->setStateSoldier(2);
+					occupied = false;
+				}
+				
 			}
 
 			else if (ai->pos != ai->getFinishP() && occupied == true ) // Check those that are not on the point
 			{
-				ai->setState(0);
+				if (ai->getID() == 1)
+				{
+					ai->setStateLeader(0);
+				}
+				else if (ai->getID() == 2)
+				{
+					ai->setStateSoldier(0);
+				}
 			}
 			
 		}
