@@ -10,9 +10,9 @@ class cAI : public GameObject
 	enum FSM_LEADER
 	{
 		STATE_LEADER_STANDBY,    // Set as default in swtich case statement
-		STATE_LEADER_FIGHTING,  // Fight other ai
-		STATE_LEADER_RETREAT,   // Go back to start point
-		STATE_LEADER_SWAPOUT,   // after someone retreats
+		STATE_LEADER_FIGHTING,   // Fight other ai
+		STATE_LEADER_RETREAT,    // Go back to start point
+		STATE_LEADER_SWAPOUT,    // after someone retreats
 	};
 
 	enum FSM_SOLDIER

@@ -88,10 +88,9 @@ void cAI::UpdateLeaderFSM(double dt)
 		case STATE_LEADER_FIGHTING:
 		{
 
-			//Move the player up
 			if ((fightpoint - pos).Length() >= 1.5f)
 			{
-				Vector3 direction;
+				Vector3 direction = fightpoint - pos;
 				vel = direction.Normalized() * AiSpeed * dt;
 				pos += vel;
 			}
@@ -99,22 +98,66 @@ void cAI::UpdateLeaderFSM(double dt)
 			else
 			{
 				pos = fightpoint;
+				health--;
+				if (health <= 2)
+				{
+					LEADER_FSM = STATE_LEADER_RETREAT;
+				}
 			}
-
 			break;
 		}
 		case STATE_LEADER_RETREAT:
 		{
+
+			if ((startpoint - pos).Length() >= 1.5f)
+			{
+				Vector3 direction = startpoint - pos;
+				vel = direction.Normalized() * AiSpeed * dt;
+				pos += vel;
+			}
+
+			else
+			{
+				pos = startpoint;
+				LEADER_FSM = STATE_LEADER_STANDBY;
+			}
+
 			break;
 		}
 		case STATE_LEADER_STANDBY:
 		{
+			if ((startpoint - pos).Length() >= 1.5f)
+			{
+				Vector3 direction = startpoint - pos;
+				vel = direction.Normalized() * AiSpeed * dt;
+				pos += vel;
+			}
+			else
+			{
+				pos = startpoint;
+			}
+
 			break;
 		}
 		case STATE_LEADER_SWAPOUT:
 		{
+			if ((fightpoint - pos).Length() >= 1.5f)
+			{
+				Vector3 direction = fightpoint - pos;
+				vel = direction.Normalized() * AiSpeed * dt;
+				pos += vel;
+			}
+
+			else
+			{
+				pos = fightpoint;
+				LEADER_FSM = STATE_LEADER_FIGHTING;
+			}
 			break;
 		}
+
+		default:
+			break;
 	}
 }
 
@@ -124,14 +167,23 @@ void cAI::UpdateSoldierFSM(double dt)
 	{
 		case STATE_SOLDIER_FIGHTING:
 		{
-			
-			health--;
-
-			if (health <= 2)
+			if ((fightpoint - pos).Length() >= 1.5f)
 			{
-				SOLDIER_FSM = STATE_SOLDIER_RETREAT;
-				break;
+				Vector3 direction = fightpoint - pos;
+				vel = direction.Normalized() * AiSpeed * dt;
+				pos += vel;
 			}
+
+			else
+			{
+				pos = fightpoint;
+				health--;
+				if (health <= 2)
+				{
+					SOLDIER_FSM = STATE_SOLDIER_RETREAT;
+				}
+			}
+			
 			break;
 		}
 		case STATE_SOLDIER_RETREAT:
@@ -165,12 +217,6 @@ void cAI::UpdateSoldierFSM(double dt)
 				pos = startpoint;
 			}
 
-
-			//health++;
-			/*if (health >= 100)
-			{
-				SOLDIER_FSM = STATE_SOLDIER_FIGHTING;
-			}*/
 			break;
 		}
 		case STATE_SOLDIER_SWAPOUT:

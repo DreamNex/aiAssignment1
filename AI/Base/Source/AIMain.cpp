@@ -114,24 +114,30 @@ void AIMain::Update(double dt)
 		if (ai != NULL)
 		{
 			ai->update(dt);
-			if (ai->pos == ai->getFinishP() && occupied == false) // Check if one of the ai pos = to the fight point
+			if (ai->pos == ai->getFinishP() && occupied == false && ai->health >= 2) // Check if one of the ai pos = to the fight point
 			{
 				occupied = true;
 			}
-			//else if (ai->pos != ai->get)
-			else if (ai->pos == ai->getFinishP() && occupied == true) // Check if one ai is already on the point
+			
+			else if (ai->pos != ai->getFinishP() && occupied == false && ai->health >= 2) // Check if one of the ai pos = to the fight point
+			{
+				ai->setState(3);
+			}
+
+			else if (ai->pos == ai->getFinishP() && occupied == true && ai->health >= 2) // Check if one ai is already on the point
 			{
 				ai->setState(1); //set it to attack.
 			}
 
-			else if (ai->pos != ai->getFinishP() && occupied == true) // Check those that are not on the point
+			else if (ai->pos == ai->getFinishP() && occupied == true && ai->health <= 2)
 			{
-				ai->setState(0);
+				ai->setState(2);
+				occupied = false;
 			}
 
-			else if (ai->getState() == 2 && occupied == true)
+			else if (ai->pos != ai->getFinishP() && occupied == true ) // Check those that are not on the point
 			{
-				occupied = false;
+				ai->setState(0);
 			}
 			
 		}
